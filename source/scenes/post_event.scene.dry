@@ -2,6 +2,31 @@ title: Post Event
 new-page: true
 on-arrival: {!
 
+// === PARTY NAME REPLACEMENT SYSTEM ===
+// This replaces all instances of "SPD" with the custom name in displayed text
+
+Q._replace_party_names = function(text) {
+    if (!text || typeof text !== 'string') return text;
+    
+    // Replace the party name references in text
+    // Note: Be careful not to replace abbreviations in other contexts
+    var customName = Q.spd_custom_name || "SPD";
+    
+    // Replace "the SPD" with custom name
+    text = text.replace(/\bthe SPD\b/gi, "the " + customName);
+    // Replace standalone "SPD" references
+    text = text.replace(/\bSPD\b/g, customName);
+    
+    return text;
+};
+
+// Hook into event display to replace party names
+var original_get_event_text = Q.get_event_text;
+Q.get_event_text = function(event_id) {
+    var text = original_get_event_text.call(this, event_id);
+    return Q._replace_party_names(text);
+};
+
 // === ACHIEVEMENT CHECKS (tick scene, on-arrival) ===
 
 // Conservative Revolution
