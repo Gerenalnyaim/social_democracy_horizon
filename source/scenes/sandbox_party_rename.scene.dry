@@ -1,0 +1,84 @@
+title: sandbox_party_rename
+subtitle: Party name management
+
+= Change Party Name
+
+@party_rename_menu
+
+Current party name: **[+ spd_custom_name +]**
+
+- @party_rename_input: Change party name
+- @party_rename_reset: Reset to default (SPD)
+- @truesandbox: Back
+
+@party_rename_input
+on-display: {!
+var container = document.getElementById('party-rename-input-container');
+if (!container) {
+    container = document.createElement('div');
+    container.id = 'party-rename-input-container';
+    document.body.appendChild(container);
+}
+
+container.innerHTML = '';
+container.style.cssText = 'margin: 20px 0; padding: 15px; background: #f5f5f5; border-radius: 5px;';
+
+var label = document.createElement('label');
+label.textContent = 'Enter new party name: ';
+label.style.cssText = 'display: block; margin-bottom: 10px; font-weight: bold;';
+
+var input = document.createElement('input');
+input.type = 'text';
+input.placeholder = 'Enter new party name...';
+input.value = Q.spd_custom_name || 'SPD';
+input.id = 'spd-name-input';
+input.style.cssText = 'background:#fff; color:#000; border:2px solid #333; padding:8px 12px; font-family:Arial; font-size:14px; width:300px; border-radius:4px; margin-bottom: 10px;';
+
+var confirmBtn = document.createElement('button');
+confirmBtn.textContent = 'Confirm';
+confirmBtn.style.cssText = 'background:#333; color:#fff; border:none; padding:8px 16px; font-family:Arial; font-size:14px; cursor:pointer; border-radius:4px; margin-right: 10px;';
+
+var cancelBtn = document.createElement('button');
+cancelBtn.textContent = 'Cancel';
+cancelBtn.style.cssText = 'background:#999; color:#fff; border:none; padding:8px 16px; font-family:Arial; font-size:14px; cursor:pointer; border-radius:4px;';
+
+confirmBtn.addEventListener('click', function() {
+    var newName = input.value.trim();
+    if (newName.length > 0 && newName.length <= 50) {
+        Q.spd_custom_name = newName;
+        console.log("Party renamed to: " + Q.spd_custom_name);
+        container.innerHTML = '<p style="color: green; font-weight: bold;">✓ Party renamed to <strong>' + Q.spd_custom_name + '</strong></p>';
+        setTimeout(function() {
+            window.dendryUI.dendryEngine.goToScene('party_rename_menu');
+        }, 1500);
+    } else {
+        var errorMsg = document.createElement('p');
+        errorMsg.textContent = '✗ Name must be between 1-50 characters.';
+        errorMsg.style.cssText = 'color: red; margin-top: 10px;';
+        container.appendChild(errorMsg);
+    }
+});
+
+cancelBtn.addEventListener('click', function() {
+    window.dendryUI.dendryEngine.goToScene('party_rename_menu');
+});
+
+container.appendChild(label);
+container.appendChild(input);
+container.appendChild(document.createElement('br'));
+container.appendChild(confirmBtn);
+container.appendChild(cancelBtn);
+!}
+
+**Enter a new name for your party (max 50 characters):**
+
+{!<div id="party-rename-input-container"></div>!}
+
+- @party_rename_menu: Back
+
+@party_rename_reset
+on-arrival: spd_custom_name = "SPD"
+
+Party name reset to **SPD**.
+
+- @party_rename_menu: Back
