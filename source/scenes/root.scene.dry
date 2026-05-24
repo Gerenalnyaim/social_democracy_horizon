@@ -17,6 +17,20 @@ go-to: start_menu_2
 - @game_over.achievements
 
 @start
+// Add SPD party name system
+Q.spd_custom_name = "SPD";
+
+// Function to update party name throughout the game
+Q.update_party_name_in_events = function() {
+    // This function gets called whenever events are displayed
+    // The custom name will be accessible via [+ spd_custom_name +] in events
+    console.log("Party name updated to: " + Q.spd_custom_name);
+};
+
+// Helper function to get party name for dynamic text
+Q.get_party_name = function() {
+    return Q.spd_custom_name || "SPD";
+};
 on-arrival: {!
 // time elapsed (in months)
 Q.time = 0;
