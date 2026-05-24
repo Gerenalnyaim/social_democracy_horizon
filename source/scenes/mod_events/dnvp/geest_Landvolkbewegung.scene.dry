@@ -13,7 +13,9 @@ on-arrival: {!
     Q.rural_dnvp >= 36.6,
     Q.sh_strength >= 750,
     Q.pro_republic <= 53,
-    Q.nationalism > 21
+    Q.nationalism > 21,
+    Q.socialism > 10,
+    Q.rural_z > 12.57
   ];
 
   // Count how many conditions are true
@@ -34,7 +36,7 @@ The geographical cleavage of the movement is immediately clear: <br>
 - @evaluate_regional_echoes: The black flags are flying high. How far does the fire spread?
 
 @evaluate_regional_echoes
-go-to: geest_ignited if landvolk_fury >= 3; geest_simmers if landvolk_fury < 3
+go-to: geest_ignited if landvolk_fury >= 4; geest_simmers if landvolk_fury < 4
 
 @geest_ignited
 face-image: img/geest_protest.png
@@ -42,10 +44,14 @@ on-arrival: {!
   Q.geest_wildfire = 1;
   Q.nationalism += 3;
   Q.pro_republic -= 4;
-  Q.coup_progress += 1; // Anti-republican agitation provides a base for future putsches
-  
+
   // The radicalization explicitly fractures the traditional right-wing base:
   Q.rural_dnvp -= 5;
+  Q.rural_dvp -= 3;
+  Q.rural_ddp -= 2;
+  Q.rural_z -= 4;
+  Q.rural_spd -= 3;
+  Q.rural_kpd += 1;
   Q.rural_nsdap += 2;  // The NSDAP begins its fatal breakthrough on the Geest plains
   
 !}

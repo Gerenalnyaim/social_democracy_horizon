@@ -21,7 +21,7 @@ on-arrival: {!
 
 Q.triggered = conditions.filter(Boolean).length;
 Q.triggered -= (Q.landvolk_suppress || 0);
-if (Q.triggered >= 3) { Q.cnbl_crisis = 1 }
+if (Q.triggered >= 4) { Q.cnbl_crisis = 1 }
 !}
 
 = Rural Crisis

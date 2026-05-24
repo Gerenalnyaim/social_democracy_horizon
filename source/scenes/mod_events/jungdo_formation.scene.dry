@@ -2,7 +2,7 @@ title: The Schism in the Patriotic Front
 subtitle: The Jungdeutscher Orden breaks with the traditional Right...
 new-page: true
 tags: event
-view-if: year = 1928 and month >= 3 and month <= 5 and weeks >= 1
+view-if: year = 1928 and month >= 3 and month <= 5 and weeks >= 0
 max-visits: 1
 on-arrival: {!
   const conditions = [

@@ -936,7 +936,7 @@ if (Q.inflation > 10) {
         Q.inflation_crisis_event = 0;
         }
 
-if (Q.year >= 1928 && Q.month == 2 && Q.weeks >= 2 && Q.landvolk_suppress < 3) {
+if (Q.year >= 1928 && Q.month == 2 && Q.weeks >= 0 && Q.bayernbund_flavor_1 == 0) {
     Q.bayernbund_flavor_1 = 1;
     Q.parties.push('bb');
 }
@@ -1147,7 +1147,9 @@ if (Q.phase_duration >= MIN_PHASE_DURATION) {
         const longDep  = Q.phase_duration > 15;
         const growthOk = grw > (longDep ? -0.5 : 0);
         const inflOk   = inf > (longDep ? -2.5 : -1);
-        if      (growthOk && inflOk)                    Q.phase = "correction";
+        if (growthOk && inflOk) Q.phase = "correction";
+        else if (longDep && growthOk && Q.demand_pressure > 0.10) Q.phase = "correction";
+        else if (longDep && inflOk  && Q.supply_pressure > 0.08) Q.phase = "correction";
         else if (Q.price_pressure > 0.3 && unem > 12)  Q.phase = "stagflation";
         else if (Q.phase_duration > 25)                 Q.phase = "correction";
     }
@@ -1311,8 +1313,10 @@ if (Q.capital_relief) {
 }
 
 if (Q.economic_growth < 0) {
-    const rate = Math.min(0.018, 0.008 + Math.abs(Q.economic_growth) * 0.0008);
-    Q.capital_pressure += rate * dt;
+    const capRateCap = Q.phase === "depression"
+    ? Math.max(0.004, 0.012 - Q.phase_duration * 0.0005)
+    : 0.018;
+    const rate = Math.min(capRateCap, 0.008 + Math.abs(Q.economic_growth) * 0.0008);
 }
 if (Q.inflation > 8 || Q.budget < -20) Q.capital_pressure += 0.020 * dt;
 
@@ -1330,12 +1334,12 @@ if (Q.phase === "depression") {
         supplyForce        += fireSale * 0.5;
     }
     if (Q.phase_duration > 0 && Q.phase_duration % 12 === 0) {
-        const strength      = Math.min(1.0, Q.phase_duration / 30);
-        Q.capital_pressure  = Math.max(0, Q.capital_pressure - 0.25 * strength);
+        const strength      = Math.min(1.0, Q.phase_duration / 29);
+        Q.capital_pressure  = Math.max(0, Q.capital_pressure - 0.30 * strength);
         Q.supply_cost_drag  = Math.max(0, Q.supply_cost_drag  - 0.15 * strength);
-        demandForce        += 0.30 * strength;
-        supplyForce        += 0.20 * strength;
-        Q.fiscal_stance    -= 0.15 * strength;
+        demandForce        += 0.33 * strength;
+        supplyForce        += 0.22 * strength;
+        Q.fiscal_stance    -= 0.16 * strength;
     }
 }
 
@@ -1381,7 +1385,10 @@ let dUnemployment = 0;
 // Denominator widened so deep collapse doesn't permanently lock unemployment.
 const growthGap = Q.economic_growth - POTENTIAL_GROWTH;
 const okunsCoeff = growthGap < 0 ? 0.032 : 0.020;
-dUnemployment -= okunsCoeff * growthGap / (1 + Math.abs(growthGap) * 0.20);  // was 0.12
+const okunsDepthScale = Q.phase === "depression"
+    ? 0.20 + Math.min(0.40, Q.phase_duration * 0.018)
+    : 0.20;
+dUnemployment -= okunsCoeff * growthGap / (1 + Math.abs(growthGap) * okunsDepthScale);
 
 dUnemployment += 0.005 * Math.max(0, Q.inflation - 6);
 
@@ -1442,7 +1449,12 @@ let dGrowth = 0;
 const _infCrisis = Math.max(0, Math.min(1, (-Q.inflation - 2) / 10));
 const _grwCrisis = Math.max(0, Math.min(1, (-Q.economic_growth - 5) / 10));
 const _uCrisis   = Math.max(0, Math.min(1, (Q.unemployed - 15) / 20));
-const DS = 1 - 0.48 * (_infCrisis * _grwCrisis * _uCrisis);
+const DS = 1 - 0.48 * Math.max(
+    _infCrisis * _grwCrisis * _uCrisis,          // all three
+    0.55 * Math.max(_infCrisis * _grwCrisis,     // any two
+                    _infCrisis * _uCrisis,
+                    _grwCrisis * _uCrisis)
+);
 
 dGrowth += 0.020 * (outputGap / (1 + Math.abs(outputGap) * 0.25));
 dGrowth += businessCycle * 0.05;
