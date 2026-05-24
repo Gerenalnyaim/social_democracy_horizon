@@ -16,6 +16,77 @@ go-to: sandbox_menu
 - @truesandbox
 - @developermode: Developer Mode
 - @debug: Purest Debug
+- @party_rename
+
+
+@party_rename
+title: Change Party Name
+
+You can rename the SPD (your party) to anything you want. This will update the name throughout all events and descriptions.
+
+Current party name: [+ spd_custom_name +]
+
+- @party_rename_input: Change name
+- @truesandbox: Back
+
+@party_rename_input
+
+What would you like to name your party?
+
+{!
+// Create input field for custom party name
+var container = document.getElementById('text-input-container');
+if (!container) {
+    container = document.createElement('div');
+    container.id = 'text-input-container';
+    document.body.appendChild(container);
+}
+
+container.innerHTML = '';
+
+var input = document.createElement('input');
+input.type = 'text';
+input.placeholder = 'Enter new party name...';
+input.value = Q.spd_custom_name || 'SPD';
+input.style.cssText = 'background:#f0f0f0; color:#000; border:2px solid #333; padding:8px 12px; font-family:Arial; font-size:14px; width:300px; border-radius:4px;';
+
+var btn = document.createElement('button');
+btn.textContent = 'Confirm';
+btn.style.cssText = 'margin-left:10px; background:#333; color:#fff; border:none; padding:8px 16px; font-family:Arial; font-size:14px; cursor:pointer; border-radius:4px;';
+
+var cancel = document.createElement('button');
+cancel.textContent = 'Cancel';
+cancel.style.cssText = 'margin-left:10px; background:#999; color:#fff; border:none; padding:8px 16px; font-family:Arial; font-size:14px; cursor:pointer; border-radius:4px;';
+
+btn.addEventListener('click', function() {
+    var newName = input.value.trim();
+    if (newName.length > 0) {
+        Q.spd_custom_name = newName;
+        Q.update_party_name_in_events();
+        container.style.display = 'none';
+        // Redirect back to menu
+        window.dendryUI.dendryEngine.goToScene('party_rename_confirm');
+    }
+});
+
+cancel.addEventListener('click', function() {
+    container.style.display = 'none';
+    window.dendryUI.dendryEngine.goToScene('party_rename');
+});
+
+container.appendChild(input);
+container.appendChild(btn);
+container.appendChild(cancel);
+!}
+
+@party_rename_confirm
+on-arrival: {!
+// Confirm the name change
+!}
+
+Party renamed to **[+ spd_custom_name +]**!
+
+- @truesandbox: Back
 
 @debug
 on-arrival: {!
