@@ -43,3 +43,291 @@ if (!Q.rng_seed) {
     Q.rng_seed = Date.now() & 0xFFFFFFFF;
 }
 
+// ========================================
+// HINDENBURG & CAMARILLA VARIABLES
+// ========================================
+
+// === HINDENBURG PERSONAL STATE ===
+Q.hindenburg_president = 0;
+Q.hindenburg_health = 100;
+Q.hindenburg_age = 78;
+Q.hindenburg_senility = 0;
+Q.hindenburg_stubbornness = 75;
+Q.hindenburg_trust_reichstag = 50;
+Q.hindenburg_trust_military = 85;
+Q.hindenburg_trust_spd = 30;
+Q.hindenburg_trust_z = 60;
+Q.hindenburg_trust_dnvp = 70;
+Q.hindenburg_monarchist_sentiment = 65;
+
+// === CAMARILLA (INNER CIRCLE) ===
+Q.camarilla_exists = 0;
+Q.camarilla_strength = 0;
+Q.camarilla_unified = 0;
+
+// Individual camarilla member influence (0-100 each)
+Q.meissner_influence = 0;
+Q.schleicher_influence = 0;
+Q.oskar_influence = 0;
+Q.oldenburg_influence = 0;
+Q.papen_influence = 0;
+Q.hugenberg_influence = 0;
+
+// Camarilla member status
+Q.meissner_exposed = 0;
+Q.schleicher_exposed = 0;
+Q.oskar_bribed = 0;
+Q.oskar_convinced = 0;
+Q.papen_in_camarilla = 0;
+Q.oldenburg_scandal = 0;
+
+// === CAMARILLA GOALS ===
+Q.camarilla_goal_destroy_parliament = 0;
+Q.camarilla_goal_install_papen = 0;
+Q.camarilla_goal_military_dictatorship = 0;
+Q.camarilla_goal_restore_monarchy = 0;
+Q.camarilla_goal_crush_left = 0;
+Q.camarilla_goal_protect_junkers = 0;
+Q.camarilla_goal_install_hitler = 0;
+
+// === PRESIDENTIAL CRISIS TRACKING ===
+Q.hindenburg_crisis_threshold = 0;
+Q.hindenburg_interventions = 0;
+Q.hindenburg_reichstag_dissolutions = 0;
+Q.hindenburg_government_dismissals = 0;
+
+// === PRESIDENTIAL CABINET ERA ===
+Q.presidential_cabinet = 0;
+Q.presidential_cabinet_count = 0;
+Q.bruning_cabinet = 0;
+Q.papen_cabinet = 0;
+Q.schleicher_cabinet = 0;
+Q.bruning_dismissed = 0;
+Q.papen_dismissed = 0;
+
+// === KEY CAMARILLA PLOTS ===
+Q.schleicher_bruning_plot = 0;
+Q.schleicher_bruning_plotted = 0;
+Q.camarilla_tired_of_bruning = 0;
+Q.papen_appointment_plot = 0;
+Q.papen_appointment_prevented = 0;
+Q.schleicher_papen_rivalry = 0;
+Q.camarilla_final_plot = 0;
+Q.hitler_appointment_prevented = 0;
+
+// === OSTHILFE SCANDAL ===
+Q.osthilfe_scandal = 0;
+Q.osthilfe_exposed = 0;
+Q.osthilfe_investigation = 0;
+Q.osthilfe_cover_up = 0;
+Q.hindenburg_estate_neudeck = 0;
+
+// === ALTERNATIVE CHANCELLORS ===
+Q.goerdeler_prominence = 0;
+Q.goerdeler_chancellor_possible = 0;
+Q.hammerstein_coup_ready = 0;
+Q.hammerstein_coup_attempted = 0;
+Q.hammerstein_coup_success = 0;
+
+// === SCHLEICHER'S QUERFRONT ===
+Q.schleicher_querfront_attempt = 0;
+Q.schleicher_querfront_attempted = 0;
+Q.schleicher_querfront_success = 0;
+Q.schleicher_querfront_spd_support = 0;
+Q.schleicher_querfront_success_chance = 30;
+Q.strasser_splits_nsdap = 0;
+
+// === PAPEN DICTATORSHIP ATTEMPT ===
+Q.papen_dictatorship_attempt = 0;
+Q.papen_second_term = 0;
+Q.cabinet_of_barons = 0;
+Q.center_split_risk = 0;
+
+// === MILITARY EMERGENCY GOVERNMENT ===
+Q.military_emergency_government = 0;
+Q.military_dictatorship = 0;
+Q.military_dictatorship_brewing = 0;
+Q.article_48_permanent = 0;
+
+// === NAZI APPOINTMENT ===
+Q.nazi_takeover_begins = 0;
+Q.hugenberg_hitler_pact = 0;
+Q.vice_chancellor = "";
+Q.vice_chancellor_party = "";
+
+// === SPD COUNTER-STRATEGIES ===
+Q.hindenburg_relationship_efforts = 0;
+Q.camarilla_counter_efforts = 0;
+Q.bruning_saved_by_spd = 0;
+Q.schleicher_appointment_prevented = 0;
+
+// === HINDENBURG DEATH/SUCCESSION ===
+Q.hindenburg_historical_death = 0;
+Q.hindenburg_death_year = 0;
+Q.hindenburg_successor_crisis = 0;
+
+// === TRACKED EVENTS ===
+Q.hindenburg_1925_elected = 0;
+Q.hindenburg_1928_seen = 0;
+Q.hindenburg_1932_reelected = 0;
+Q.hindenburg_opposes_hitler_1932 = 0;
+
+// === CAMARILLA MEETINGS ===
+Q.camarilla_meeting_count = 0;
+Q.last_camarilla_meeting = "";
+Q.oskar_house_meeting = 0;
+
+Q.hindenburg_age = 78 + (Q.year - 1925);
+Q.hindenburg_health = 90;
+Q.hindenburg_senility = 10;
+Q.camarilla_strength = 35;
+Q.meissner_influence = 55;
+Q.oskar_influence = 60;
+Q.oldenburg_influence = 45;
+Q.schleicher_influence = 40;
+Q.camarilla_goal_protect_junkers = 70;
+Q.camarilla_goal_crush_left = 50;
+Q.camarilla_goal_destroy_parliament = 15;
+
+Q.president_party = "I";
+Q.president_relation = 50;
+Q.next_presidential_election_year = 1932;
+Q.next_presidential_election_month = 5;
+Q.next_austria_election = 1930;
+Q.hindenburg_trust_spd = 50;
+Q.spd_congress_next_year = 1928;
+Q.spd_congress_next_month = 5;
+
+Q.dues_workers = 1;
+Q.dues_unemployed = 0.5;
+Q.dues_new_middle = 2;
+Q.dues_old_middle = 1;
+Q.dues_rural = 1;
+Q.dues_catholics = 1;
+
+Q.young_socialists = 1;
+Q.ideology = "centrist";
+
+// === Macro Impulse & Pressure Variables (Cycle-Level, Continuous) ===
+Q.fiscal_stance = 0.0;
+Q.demand_impulse = 0.0;
+Q.supply_impulse = 0.0;
+Q.distribution_shift = 0.0;
+Q.capital_pressure = 0.0;
+Q.price_pressure = 0.0;
+Q.trade_pressure = 0.0;
+Q.policy_momentum = 0.0;
+Q.shock_residual = 0.0;
+
+// Reichsbank
+Q.schacht_relation = 5;
+Q.reichsbank_independent = 2;
+Q.reichsbank_loyalty = 40;
+Q.reichsbank_president = "Schacht";
+Q.reichstag_president = "Paul Lobe";
+
+// international relations
+Q.west_relation = 0;
+Q.britain_relation = 1;
+Q.france_relation = -1;
+Q.italy_relation = 0;
+Q.hungary_relation = 0;
+Q.poland_relation = 0;
+Q.czech_relation = 0;
+Q.austria_relation = 0;
+
+// International situation
+Q.ruhr_labor = 0;
+Q.tyrole_signed = 0;
+Q.young_plan_catastrophy = 0;
+Q.austria_govt = 1;
+
+// 0 = normal difficulty, 1 = hard mode, 2 = hard mode no saves
+Q.difficulty = 0;
+Q.historical_mode = 0;
+Q.old_demographics = 0;
+Q.use_decimals = 0;
+
+// party resources
+Q.resources = 2;
+Q.dues = 2;
+
+// the state of the party
+Q.dissent = 0.05;
+Q.dissent_percent = 5;
+
+// factions
+Q.factions = ['left', 'center', 'labor', 'reformist', 'neorevisionist'];
+Q.left_strength = 12;
+Q.left_dissent = 20;
+Q.center_strength = 33;
+Q.center_dissent = 0;
+Q.labor_strength = 25;
+Q.labor_dissent = 5;
+Q.reformist_strength = 25;
+Q.reformist_dissent = 5;
+Q.neorevisionist_strength = 5;
+Q.neorevisionist_dissent = 10;
+
+// SPLIT EVENTS or OTHER
+Q.unions_independent = 0;
+Q.centrists_resign = 0;
+Q.left_split = 0;
+Q.reformists_resigned = 0;
+Q.sapd_formed = 0;
+Q.neorevisionism = 0;
+Q.srpd_formed = 0;
+Q.neorev_split = 0;
+
+// crisis_urgency indicates how seriously the SPD is taking the economic crisis - scale from 0 to 10.
+Q.crisis_urgency = 0;
+// nazi_urgency indicates how seriously the SPD takes the nazis - scale from 0 to 10.
+Q.nazi_urgency = 0;
+// radicalization indicates how radical the SPD's rhetoric is - scale from 0 to 10.
+Q.radicalization = 0;
+Q.wtb_support = 0;
+Q.pacifism = 0;
+Q.democratization = 0;
+Q.communist_coalition = 0;
+Q.economic_plan = 0;
+Q.wtb_adopted = 0;
+Q.iron_front_formed = 0;
+Q.peoples_party_support = 0;
+Q.nationalization_support = 0;
+Q.nationalization_adopted = 0;
+Q.moderate_plan_support = 0;
+Q.moderate_plan_adopted = 0;
+
+// organizations
+Q.kpd_ideology = "Marxism-Leninism";
+Q.kpo_ideology = "Council Communism";
+Q.sl_ideology = "Revolutionary Socialism";
+Q.sapd_ideology = "Left-Wing Socialism";
+Q.spd_ideology = "Social Democracy";
+Q.srpd_ideology = "Social Republicanism";
+Q.ddp_ideology = "Social Liberalism";
+Q.z_ideology = "Catholic Tent";
+Q.bvp_ideology = "Bavarian Conservatism";
+Q.hl_ideology = "Hanseatic Agrarian Conservatism";
+Q.aspd_ideology = "Right-Wing Social Democracy";
+Q.csrp_ideology = "Christian Socialism";
+Q.dvp_ideology = "National Liberalism";
+Q.vrp_ideology = "Middle-Class Interest";
+Q.wp_ideology = "Middle-Class Interest";
+Q.cnbl_ideology = "Agrarian Conservatism";
+Q.csvd_ideology = "Protestant Social Conservatism";
+Q.kvp_ideology = "Moderate Conservatism";
+Q.dhp_ideology = "Hanoverian Agrarianism";
+Q.bb_ideology = "Liberal Agrarianism";
+Q.vnr_ideology = "Völkisch Liberalism";
+Q.dnvp_ideology = "National Conservatism";
+Q.nsdap_ideology = "National Socialism";
+Q.dvfp_ideology = "Völkisch Nationalism";
+
+Q.dnvp_line = 2;
+
+// Initialize started to begin the game
+Q.started = 1;
+!}
+
+go-to: post_event
