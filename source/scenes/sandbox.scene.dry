@@ -8,8 +8,6 @@ go-to: sandbox_menu
 
 @sandbox_menu
 
-- @very-well: Economical Variables Debug 
-- @all-variables: All variables.
 - @secretmode: Secret Mode
 - @wacky: All wacky things (unlocked when reaching 1935)
 - @technical: Technical things, just messing with variables.
