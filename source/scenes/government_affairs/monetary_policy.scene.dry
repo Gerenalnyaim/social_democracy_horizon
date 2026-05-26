@@ -1,85 +1,139 @@
-title: Monetary Policy
+title: Monetary Policy — Interest Rate Decision
 new-page: true
 is-card: true
 tags: govt_affairs, cabinet
-view-if: spd_in_government = 1 and finance_minister_party = 'SPD' and monetary_policy_timer <= 0 and (reichsbank_president = "Blessing" or reichsbank_president = "Hilferding" or sandbox = 1)
+view-if: spd_in_government = 1 and finance_minister_party = 'SPD' and monetary_policy_timer <= 0 and (reichsbank_president = "Blessing" or reichsbank_president = "Hilferding" or (schacht_plan_adopted = 1 and schacht_relation > 0) or sandbox = 1)
 on-arrival: monetary_policy_timer = 24
 card-image: img/Reichsbank.jpg
 
-- @orthodox_tightening
-- @moderate_stabilization
-- @expansionary_credit
-- @emergency_reflation
-- @fiscal_monetary_coordination
-- @gold_standard_defense
-- @root: Do not enact any policies for now.
+The Reichsbank President awaits your direction on the discount rate. The current rate shapes borrowing costs across the entire economy — every point matters.
+
+- @rate_hike_sharp
+- @rate_hike_moderate
+- @rate_hold
+- @rate_cut_moderate
+- @rate_cut_sharp
+- @root: Take no action for now.
 - @easy_discard
 - @cancel_advisor_action
 
-@orthodox_tightening
-title: Orthodox Monetary Tightening
-subtitle: Raise discount rates and restrict credit to combat inflation
-on-arrival: price_pressure -= 0.8; capital_pressure += 0.3; investment_chill += 0.4; demand_impulse -= 0.4; inflation_expectations -= 0.3; dInflation -= 0.5; dGrowth -= 0.3; dUnemployment += 0.2
+@rate_hike_sharp
+title: Sharp Rate Hike (+2 points)
+subtitle: Aggressive tightening to crush inflation and defend the currency
+view-if: inflation > 3 or capital_pressure > 0.4
+on-arrival: {!
+    Q.price_pressure -= 1.20;
+    Q.inflation_expectations -= 0.75;
+    Q.demand_impulse -= 0.90;
+    Q.investment_chill += 0.75;
+    Q.capital_pressure -= 0.45;
+    Q.dInflation -= 0.75;
+    Q.dGrowth -= 0.60;
+    Q.dUnemployment += 0.45;
+    Q.discount_rate += 2;
+!}
 
-The Reichsbank raises the discount rate by 150 basis points and implements stricter lending standards. This orthodox approach prioritizes currency stability and investor confidence over short-term growth considerations.
+The Reichsbank raises the discount rate by a full 200 basis points — a shock to credit markets that signals unwavering commitment to price stability.
 
-**Economic Effects:** Higher borrowing costs dampen investment activity and reduce consumer credit availability. Price pressures ease as demand contracts, but unemployment rises modestly as businesses postpone expansion plans.
+**Inflation:** The sharp tightening hammers price expectations. Credit dries up fast; consumers and businesses pull back. Inflation falls quickly but painfully.
 
-**Political Consequences:** Industrialists complain about credit constraints. The SPD criticizes the policy as favoring creditors over workers. However, middle-class savers and foreign investors view the move favorably.
+**Growth & Employment:** Investment freezes. Firms delay expansion or cancel hiring. Unemployment rises noticeably within a few months. The economy contracts if already weak.
 
-@moderate_stabilization
-title: Moderate Stabilization Policy
-subtitle: Balance growth and stability through gradual monetary adjustment
-on-arrival: price_pressure -= 0.3; demand_impulse -= 0.15; inflation_expectations -= 0.15; dInflation -= 0.2; dGrowth -= 0.1; dUnemployment += 0.05
+**External:** Foreign capital flows in, drawn by higher yields. The currency strengthens. Import costs fall, providing indirect relief on prices.
 
-The Reichsbank pursues a middle course, adjusting interest rates modestly while maintaining credit availability for productive enterprises.
+*Best used when inflation is above 5% or the currency is under speculative attack. Dangerous if the economy is already contracting.*
 
-**Economic Effects:** The measured tightening provides enough restraint to stabilize inflation expectations without triggering a sharp downturn. Credit remains available for solid businesses.
+@rate_hike_moderate
+title: Moderate Rate Hike (+1 point)
+subtitle: Gradual tightening to cool inflation without choking growth
+on-arrival: {!
+    Q.price_pressure -= 0.60;
+    Q.inflation_expectations -= 0.45;
+    Q.demand_impulse -= 0.45;
+    Q.investment_chill += 0.30;
+    Q.capital_pressure -= 0.23;
+    Q.dInflation -= 0.30;
+    Q.dGrowth -= 0.23;
+    Q.dUnemployment += 0.15;
+    Q.discount_rate += 1;
+!}
 
-**Political Consequences:** This pragmatic stance draws less criticism than extreme measures. Business leaders appreciate continued credit access, while fiscal conservatives note progress on inflation.
+The Reichsbank lifts the discount rate by 100 basis points — a measured signal that the era of easy money is ending.
 
-@expansionary_credit
-title: Expansionary Credit Policy
-subtitle: Lower rates and expand lending to combat unemployment and deflation
-view-if: reichsbank_president = "Blessing" or reichsbank_president = "Hilferding" or (year > 1940 and judicial_reform > 20 and wtb_implemented > 7)
-on-arrival: demand_impulse += 0.5; investment_chill -= 0.3; price_pressure += 0.3; inflation_expectations += 0.2; capital_pressure -= 0.3; dInflation += 0.3; dGrowth += 0.4; dUnemployment -= 0.25
+**Inflation:** Borrowing costs rise modestly. Credit expansion slows. Price pressures ease gradually without a hard shock to business confidence.
 
-The Reichsbank slashes the discount rate and instructs banks to expand lending, particularly for productive investment and employment-creating projects.
+**Growth & Employment:** Investment slows at the margins. Some speculative lending dries up. Growth dips slightly but a recession is not triggered if the economy is otherwise healthy.
 
-**Economic Effects:** Cheaper credit stimulates business investment and consumer spending. Unemployment falls as firms expand hiring. However, the stimulus risks rekindling inflation if the economy approaches full capacity.
+**External:** Modest capital inflows. Currency firms up. The move is well-received by orthodox economists and the international financial community.
 
-**Political Consequences:** The SPD and trade unions enthusiastically support the policy. Export-oriented industries benefit from the weaker currency. Orthodox economists warn of inflation risks.
+*The standard first response to rising inflation. Safe to use before the situation becomes acute.*
 
-@emergency_reflation
-title: Emergency Reflation Measures
-subtitle: Deploy extraordinary monetary expansion to combat severe deflation
-view-if: inflation < -5 or unemployment > 14
-on-arrival: demand_impulse += 1.0; price_pressure += 0.8; inflation_expectations += 0.6; capital_pressure -= 0.6; investment_chill -= 0.8; dInflation += 0.8; dGrowth += 0.7; dUnemployment -= 0.5
+@rate_hold
+title: Hold Rates Steady
+subtitle: Maintain the current discount rate and monitor conditions
+on-arrival: {!
+    Q.inflation_expectations += 0;
+    Q.monetary_policy_timer = 3;
+!}
 
-Facing catastrophic deflation, the Reichsbank abandons orthodoxy: near-zero interest rates, direct lending to critical industries, and massive monetary base expansion.
+The Reichsbank signals that current monetary conditions are appropriate. No change to the discount rate.
 
-**Economic Effects:** The monetary shock breaks deflation expectations and stabilizes prices. Banks receive liquidity support, preventing systemic collapse. Investment revives as entrepreneurs regain confidence.
+**Inflation:** Price trends continue on their existing trajectory — neither reinforced nor countered by policy.
 
-**Political Consequences:** This dramatic intervention sparks fierce debate. The left celebrates bold action to save jobs. Orthodox economists denounce it as currency debasement. Success depends on whether the economy responds before inflation expectations destabilize.
+**Growth & Employment:** Business and consumer borrowing costs are unchanged. No immediate impact on investment or hiring plans.
 
-@fiscal_monetary_coordination
-title: Fiscal-Monetary Coordination
-subtitle: Align Reichsbank policy with government fiscal strategy
-on-arrival: fiscal_stance += 0.3; demand_impulse += 0.3; price_pressure += 0.2; inflation_expectations += 0.1; dInflation += 0.15; dGrowth += 0.25; dUnemployment -= 0.15
+**Signal:** Holding can itself send a message — either calm confidence that the situation is under control, or, if inflation is rising, a failure of nerve that markets may punish.
 
-The Reichsbank coordinates its monetary policy with the government's fiscal program, ensuring credit conditions support public spending initiatives.
+*Use when economic data is mixed or a policy change would create unnecessary volatility. Costs nothing in the short run; complacency is the risk.*
 
-**Economic Effects:** The synchronized policy mix maximizes economic impact. Government spending finds willing lenders, infrastructure projects proceed smoothly, and private investment complements public initiatives.
+@rate_cut_moderate
+title: Moderate Rate Cut (−1 point)
+subtitle: Easing credit to stimulate investment and cushion a downturn
+view-if: unemployment > 8 or inflation < 2 or economic_growth < 1
+on-arrival: {!
+    Q.demand_impulse += 0.75;
+    Q.price_pressure += 0.30;
+    Q.inflation_expectations += 0.23;
+    Q.capital_pressure += 0.15;
+    Q.investment_chill -= 0.45;
+    Q.dInflation += 0.23;
+    Q.dGrowth += 0.45;
+    Q.dUnemployment -= 0.23;
+    Q.discount_rate -= 1;
+!}
 
-**Political Consequences:** The SPD views it as pragmatic cooperation. However, purists denounce erosion of Reichsbank independence, warning that political pressure threatens currency stability.
+The Reichsbank lowers the discount rate by 100 basis points, reducing the cost of credit for businesses and households alike.
 
-@gold_standard_defense
-title: Gold Standard Defense
-subtitle: Maintain currency parity through strict monetary discipline
-on-arrival: capital_pressure -= 0.4; price_pressure -= 0.5; inflation_expectations -= 0.3; demand_impulse -= 0.5; investment_chill += 0.5; trade_pressure -= 0.2; dInflation -= 0.4; dGrowth -= 0.4; dUnemployment += 0.3
+**Growth & Investment:** Firms can borrow more cheaply. Postponed expansion plans become viable again. Consumer credit loosens. Spending and hiring recover gradually.
 
-The Reichsbank prioritizes maintaining gold parity above all else, raising rates as necessary to defend the currency and prevent capital flight.
+**Inflation:** Slight upward pressure on prices as demand recovers. Deflation risk recedes. This is the intended effect — not a bug.
 
-**Economic Effects:** The commitment to gold anchors inflation expectations and attracts foreign capital. However, tight monetary conditions strangle domestic credit and may deepen deflation if global conditions weaken.
+**External:** Some capital may seek higher yields abroad. The currency softens modestly. Exporters benefit; importers see slightly higher costs.
 
-**Political Consequences:** International financiers praise the discipline. However, workers and domestic industrialists bear the costs of high unemployment. The SPD attacks the policy as sacrificing German workers to foreign creditors.
+*Use when unemployment is rising, deflation looms, or growth has stalled. Ineffective if banks are too frightened to lend regardless of rates.*
+
+@rate_cut_sharp
+title: Emergency Rate Cut (−2 points)
+subtitle: Dramatic easing to arrest deflation and avert economic collapse
+view-if: unemployment > 14 or inflation < -3 or economic_growth < -3
+on-arrival: {!
+    Q.demand_impulse += 1.50;
+    Q.price_pressure += 0.75;
+    Q.inflation_expectations += 0.60;
+    Q.capital_pressure += 0.30;
+    Q.investment_chill -= 0.90;
+    Q.dInflation += 0.60;
+    Q.dGrowth += 0.90;
+    Q.dUnemployment -= 0.45;
+    Q.discount_rate -= 2;
+!}
+
+The Reichsbank slashes the discount rate by 200 basis points in an emergency session. This is an unmistakable signal that deflation is the paramount threat.
+
+**Growth & Investment:** Credit costs collapse. Banks are flooded with Reichsbank liquidity. Businesses that were paralyzed by uncertainty receive a strong signal to resume investment.
+
+**Deflation:** The price spiral begins to break. Falling expectations of further price drops — the most destructive element of deflation — are disrupted by the dramatic intervention.
+
+**Risks:** Orthodox economists and foreign creditors react with alarm. Capital outflows accelerate. If confidence in the currency collapses entirely, the cure risks becoming worse than the disease.
+
+*Only available in genuine crisis — deep deflation, mass unemployment, or collapsing growth. The most powerful monetary tool remaining before unconventional measures.*

@@ -9,6 +9,7 @@ on-arrival: {!
     if (!Q.dues_old_middle) { Q.dues_old_middle = 1; }
     if (!Q.dues_rural) { Q.dues_rural = 1; }
     
+    
     // Initialize bonus dues if not set
     Q.bonus_dues_workers = Q.bonus_dues_workers || 0;
     Q.bonus_dues_unemployedc = Q.bonus_dues_unemployedc || 0;
@@ -21,11 +22,11 @@ on-arrival: {!
     Q.rural_pct       = Math.round((Q.rural_spd_normalized        || 0) * 100 * 10) / 10;
 
     // Income uses population share × SPD vote share within that class
-    Q.workers_income     = Math.round(Q.workers     * Q.workers_pct     * Q.dues_workers     * 0.0007 * (1 - Q.labor_dissent     * 0.007));
-    Q.unemployedc_income = Math.round(Q.unemployedc * Q.unemployedc_pct * Q.dues_unemployedc * 0.0004 * (1 - Q.left_dissent     * 0.007));
-    Q.new_middle_income  = Math.round(Q.new_middle  * Q.new_middle_pct  * Q.dues_new_middle  * 0.00012 * (1 - Q.reformist_dissent * 0.006));
-    Q.old_middle_income  = Math.round(Q.old_middle  * Q.old_middle_pct  * Q.dues_old_middle  * 0.00018 * (1 - Q.center_dissent    * 0.006));
-    Q.rural_income       = Math.round(Q.rural       * Q.rural_pct       * Q.dues_rural       * 0.00016 * (1 - Q.neorevisionist_dissent    * 0.006));
+    Q.workers_income     = Math.round(Q.workers     * Q.workers_pct     * Q.dues_workers     * 0.00364 * (1 - Q.labor_dissent        * 0.007));
+    Q.unemployedc_income = Math.round(Q.unemployedc * Q.unemployedc_pct * Q.dues_unemployedc * 0.02909 * (1 - Q.left_dissent          * 0.007));
+    Q.new_middle_income  = Math.round(Q.new_middle  * Q.new_middle_pct  * Q.dues_new_middle  * 0.00727 * (1 - Q.reformist_dissent     * 0.006));
+    Q.old_middle_income  = Math.round(Q.old_middle  * Q.old_middle_pct  * Q.dues_old_middle  * 0.01309 * (1 - Q.center_dissent        * 0.006));
+    Q.rural_income       = Math.round(Q.rural       * Q.rural_pct       * Q.dues_rural       * 0.00945 * (1 - Q.neorevisionist_dissent * 0.006));
     
     // Total projected income
     Q.total_projected = (Q.workers_income + Q.bonus_dues_workers) + (Q.unemployedc_income + Q.bonus_dues_unemployedc) + Q.new_middle_income + Q.old_middle_income + Q.rural_income;
@@ -263,10 +264,10 @@ We have saved 5 resources, however face criticism in the face of weakened appara
 subtitle: Seek large donations from sympathetic wealthy individuals
 choose-if: donors_timer <= 0
 unavailable-subtitle: [? if donors_timer > 0 : Cannot approach wealthy donors again yet. Available in [+ donors_timer +] turns. ?]
-on-arrival: resources += 3; left_dissent += 10; labor_dissent += 8; reformist_dissent -= 2; donors_timer = 24
+on-arrival: resources += 3; left_dissent += 10; labor_dissent += 8; reformist_dissent -= 2; donors_timer = 24; left_strength -= 7
 
 We discreetly approach wealthy industrialists, intellectuals, and professionals sympathetic to social democracy. They contribute 3 resources to us.
 
-The Left wing denounces this as selling out to capitalist interests. Workers question our commitment to class struggle. Reformists appreciate the pragmatism.
+The Left wing denounces this as selling out to capitalist interests, with workers questioning our commitment to class struggle.
 
 - @root: Continue.

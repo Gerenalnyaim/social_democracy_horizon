@@ -1,123 +1,70 @@
-title: Schacht's Crisis Doctrine
+Title: Schacht's Fiscal Ultimatum
 subtitle: March 1930
 new-page: true
-view-if: year = 1930 and month = 4 and (support_memorandum = 1 or finance_minister = "Moldenhauer") and schacht_relation >= 0 and schacht_resigned != 1
+view-if: year = 1930 and month = 4 and schacht_resigned != 1 and schacht_relation >= 0
 tags: event
 max-visits: 1
 face-image: img/portraits/SchachtHjalmar.jpg
 
-= Schacht's Crisis Doctrine
+= Schacht's Fiscal Ultimatum
 
-Hjalmar Schacht requests an urgent meeting with the Reich Cabinet. The Reichsbank President arrives with economic reports, financial projections, and an uncharacteristic gravity in his manner.
+Hjalmar Schacht requests an urgent meeting with the Reich Cabinet. The Reichsbank President arrives not with plans for economic relief, but with a scathing indictment of the government's financial policies and an unyielding demand for orthodox fiscal discipline.
 
-"Gentlemen," he begins, dispensing with his usual swagger, "I must revise my previous assessments. What we face is not a cyclical downturn requiring orthodox fiscal discipline. This is a systemic collapse of global capitalism."
+"Gentlemen," he begins, his tone sharp and accusatory, "I must speak with full moral gravity. When I signed the Young Plan in Paris, it was under the explicit assumption that Germany would put her financial house in order. Instead, we have witnessed a continuous muddle, a disordered state of finances, and an intolerable accumulation of floating debt."
 
-The statistics he presents are harrowing. Industrial production has fallen 23% in six months. Unemployment approaches three million and accelerates weekly. Credit markets are frozen. International trade has contracted catastrophically. American loans—the foundation of Germany's post-inflation prosperity—have stopped entirely.
+The statistics he presents are a condemnation of democratic governance. He lists climbing treasury deficits and the failure of the Reich to implement far-reaching expenditure cuts. 
 
-"The Dawes Plan assumed continued American capital inflows," Schacht explains. "That assumption is now inoperative. We are witnessing the unwinding of the entire post-war economic order."
+"The present state of affairs places German freedom of action under pressure that is completely unendurable," Schacht explains. "Furthermore, by capitulating at The Hague and allowing the Allies to retain the right to impose political sanctions or military threats if we default, you have completely falsified the original agreement. A political threat hovering over Germany will impair our credit and force devastating credit restrictions."
 
-[? if support_memorandum = 1 : "I appreciate that this government stood with me in Paris," he continues. "You demonstrated that Germany would not be dictated to by the Allies. Now I believe we must demonstrate Germany will not be destroyed by orthodox economic theory." ?]
+[? if finance_minister = "Hilferding" : "I have already made my position clear to Herr Hilferding," Schacht adds coldly. "The Reichsbank will not facilitate foreign credits to bridge your short-term cash crises unless you legally commit to a strict debt redemption fund through immediate tax increases or reduced expenditures." ?]
 
-[? if finance_minister != "Hilferding" and support_memorandum != 1 : "I recognize that my previous advice—strict austerity, balanced budgets—was premature," he admits with visible difficulty. "The situation has evolved beyond conventional prescriptions." ?]
+[? if finance_minister = "Moldenhauer" : "I appreciate that Herr Moldenhauer recognizes the somber reality of our economic situation," Schacht says, "but the Cabinet must fully commit to balancing the budget and reducing the burden on productive private economy rather than social spending." ?]
 
-Schacht's proposal is startling coming from the Reichsbank President: emergency credit expansion, suspension of certain gold standard obligations, government-directed industrial financing, and—most shocking—deficit spending for strategic economic intervention.
+Schacht’s proposal is an uncompromised ultimatum: the government must immediately halt its reliance on short-term credit, implement rigorous budget balancing through spending cuts, or he will resign from the Reichsbank presidency entirely.
 
-"I am not proposing socialism," he clarifies sharply. "I am proposing national economic mobilization. The liberal international order has failed. Germany must act unilaterally to preserve its economic existence."
+"I am not a politician," he clarifies sharply. "But I refuse to accept responsibility for the economic crises that your financial mismanagement and submission to the Allies will inevitably provoke."
 
-It's a nationalist, not socialist, argument for intervention—but the practical proposals overlap significantly with what the left has been demanding. The difference is that Schacht's plan emphasizes industrial production and export capacity over social welfare, and explicitly envisions eventual restoration of private capital dominance.
+It is a frontal assault on the social welfare expenditures championed by the Left. For the Social Democrats, Schacht's high-handedness feels less like expert advice and more like a dictatorial attempt by capital interests to subvert the elected legislature.
 
-Still, the Reichsbank President offering to facilitate deficit spending and credit expansion? The implications are enormous.
+Still, the Reichsbank President threatening to walk out or block state credit lines? The implications are enormous. If he resigns, it will signal a vote of no confidence from the financial establishment, delighting the right-wing nationalists and endangering the stability of the Republic.
 
-Finance Minister [? if finance_minister = "Moldenhauer" : Moldenhauer ?][? if finance_minister = "Hilferding" : Hilferding ?][? if finance_minister != "Moldenhauer" and finance_minister != "Hilferding" : the Finance Minister ?] looks stunned. The DVP ministers exchange uncertain glances. The opportunity is real—but so are the risks.
+How should we respond to Schacht's ultimatum?
 
-How should we respond to Schacht's offer?
+- @accept_schacht_austerity: Capitulate to Schacht's demands—enact strict fiscal discipline and austerity to preserve financial stability.
+- @compromise_lex_schacht: Negotiate a middle ground, setting up a debt redemption fund while fiercely defending social programs.
+- @reject_schacht: Defy the "parallel government" of the Reichsbank—let him resign and demand that the legislature control fiscal policy.
 
-- @accept_schacht_plan: Accept Schacht's framework for economic intervention.
-- @negotiate_terms: Negotiate to include more labor protections and social spending.
-- @counter_with_wtb: Counter-propose our own WTB-style plan with Schacht's financial backing.
-- @refuse_schacht: Refuse—we will not implement nationalist economics under technocratic authority.
+@accept_schacht_austerity
+on-arrival: schacht_plan_adopted = 1; budget_balanced = 1; schacht_relation += 15; dvp_relation += 10; left_dissent += 20; labor_dissent += 15; unemployed += 2; fiscal_stance += 0.3; capital_pressure -= 0.15; budget += 2;
 
-@accept_schacht_plan
-on-arrival: schacht_plan_adopted = 1; economic_plan = 4; reichsbank_independent = 2; schacht_relation += 15; dnvp_relation += 5; dvp_relation += 10; left_dissent += 15; labor_dissent += 10; nationalism += 5; unemployed -= 4; economic_growth += 1.5; fiscal_stance -= 0.15; demand_impulse += 0.15; supply_impulse += 0.25; capital_pressure -= 0.15; budget -= 2;
-achievement: faustischer_pakt
+"We have no choice but to accept the Reichsbank President's fiscal framework," the Cabinet announces. "Financial stability must be maintained at all costs."
 
-"We accept the Reichsbank President's proposal," we announce. "Germany faces existential economic crisis. Ideological purity is a luxury we cannot afford."
+To appease Schacht, the government rushes through a program of rigorous fiscal retrenchment. Expenditures are slashed across departments, and the unemployment insurance contributions are raised while social benefits are squeezed. The budget is brought into alignment with the orthodox standard Schacht demanded to ease the execution of the Young Plan.
 
-The Schacht Plan is implemented with remarkable speed. The Reichsbank extends emergency credit to strategic industries—steel, chemicals, machinery. Government contracts flow to firms willing to maintain employment. Export industries receive subsidized financing. Deficit spending is authorized for "productive investment" rather than social welfare.
+The bourgeois press and the Federation of German Industries cautiously celebrate this return to "responsible activism" and sound finance. Capital flight slows, and Schacht agrees to remain at his post to help manage Germany's international obligations under the Bank for International Settlements.
 
-It's economic nationalism dressed in technical language: Germany organizing its economy for survival in a collapsing world system. The emphasis is relentlessly productivist—factories over families, exports over welfare, industrial capacity over social protection.
+But our left wing and the trade unions are absolutely appalled. "We are capitulating to a dictatorship of capital!" they protest fiercely. By prioritizing the demands of an unelected banker over the plight of millions of citizens, we have severely alienated our working-class base, causing labor dissent to skyrocket as unemployment deepens under the pressure of fiscal contraction.
 
-Still, unemployment begins to decline. Factories reopen. The economic freefall slows, then stabilizes. The bourgeois press cautiously celebrates "responsible activism." The Nationalists approve of Schacht's "national economic sovereignty" rhetoric, even if implemented by a republican government.
+[? if left_strength > 35 : The left faction threatens an immediate revolt within the party. "We have become the administrators of bourgeois austerity!" ?]
 
-But our left wing is appalled. "We're implementing capitalist planning under nationalist ideology!" they protest. "Where are the workers' interests? This helps industrialists, not the unemployed!" Even labor unions note that job creation emphasizes export industries—male-dominated heavy industry—while sectors employing women and providing social services are neglected.
+@compromise_lex_schacht
+on-arrival: lex_schacht_passed = 1; schacht_relation += 5; finance_minister_resigned = 1; dvp_relation += 5; left_dissent += 10; labor_dissent += 5; budget += 1;
 
-Schacht meets regularly with the Cabinet, an unelected technocrat wielding enormous influence over economic policy. Is this democratic governance, or have we surrendered to authoritarian expertise?
+We resolve to seek a tense compromise with the stubborn Reichsbank President. After grueling negotiations, the party leaders capitulate to his immediate demand to safeguard the Reich's short-term liabilities. 
 
-[? if wtb_adopted = 1 : The WTB-Plan advocates are bitter that Schacht's nationalist version is implemented while their labor-friendly proposals were ignored. ?]
+The result is the "Lex Schacht"—a bill establishing a mandatory 450,000,000 mark redemption fund to ensure the floating debt is paid back within the next budget year through targeted tax adjustments. In return, Schacht utilizes domestic funds to help the treasury bridge its immediate end-of-year cash crunch.
 
-[? if left_strength > 35 : The left faction threatens revolt. "We've become administrators of capitalist autarky!" ?]
+However, this political humiliation carries a heavy price. Finance Minister Rudolf Hilferding, a target of relentless vitriol from both Schacht and the right-wing press, finds his position completely untenable and is forced to resign. He is replaced by Paul Moldenhauer of the DVP, shifting the government's economic alignment further to the right.
 
-@negotiate_terms
-choose-if: spd_in_government and (in_grand_coalition or in_weimar_coalition)
-unavailable-subtitle: [? if not spd_in_government : We must be in government to negotiate policy terms. ?] [? if not in_grand_coalition and not in_weimar_coalition : We need coalition leverage to modify Schacht's proposal. ?]
-on-arrival: schacht_plan_adopted = 1; economic_plan = 4; schacht_relation += 8; reichsbank_independent = 2; dvp_relation += 5; left_dissent += 8; labor_dissent += 5; unemployed -= 3.5; economic_growth += 1.3; workers_spd += 5*(1-dissent); fiscal_stance -= 0.12; demand_impulse += 0.12; supply_impulse += 0.20; distribution_shift += 0.03; capital_pressure -= 0.10; budget -= 2;
-achievement: faustischer_pakt
+The trade unions and the Socialist press bitterly note that the Reichstag has been forced to legislate under the open duress of the central bank. While we have managed to temporarily avert a total collapse of the coalition and kept Schacht from walking out, his "parallel government" has dealt a severe blow to parliamentary sovereignty.
 
-"We accept the framework but insist on modifications," we state. "Economic intervention must serve all Germans, not just industrialists."
+@reject_schacht
+on-arrival: schacht_resigned = 1; reichsbank_independent = 1; schacht_relation -= 25; left_strength += 10; left_dissent -= 15; reformist_dissent += 15; dvp_relation -= 15; dnvp_relation -= 10; crisis_urgency += 2;
 
-Negotiations with Schacht are tense but productive. We secure commitments: government contracts must include wage floors and union recognition clauses. Credit expansion must include housing construction and municipal infrastructure, not just export industries. Social insurance programs cannot be cut to finance industrial subsidies.
+"We will not tolerate a parallel government by the Reichsbank," we declare firmly, echoing the anger of our party executive. "The legislature will not succumb to a dictatorship of capital or be blackmailed by an unelected official."
 
-Schacht accepts these modifications with visible reluctance. "You're reducing economic efficiency for political considerations," he complains. But he needs government authorization for his plan, and we're providing it—with conditions.
+Refusing to back down on our social commitments or accept his strictures, we accept Hjalmar Schacht's resignation. On March 7, 1930, he officially steps down from the Reichsbank presidency, publicly stating that he cannot take responsibility for a "falsified" Young Plan that exposes Germany to foreign political sanctions and deflationary crises.
 
-The modified Schacht Plan rolls out. It's less purely productivist than his original proposal, more balanced between industrial and social priorities. Unemployment declines somewhat more slowly, but the benefits are distributed more broadly. Women's employment is protected. Housing construction provides working-class jobs.
+Our left wing and the trade unions celebrate this principled stand against reactionary pressure. "We have defended the sovereignty of the Republic against autocracy!" they proclaim.
 
-The bourgeois parties grumble about "socialist interference" but accept the compromise. The Nationalists are less enthusiastic than they'd be about pure Schacht doctrine, but still approve of economic nationalism. Our left wing remains skeptical but acknowledges we've extracted real concessions.
-
-It's Weimar compromise in action: nobody's ideal policy, but something better than catastrophe.
-
-[? if labor_strength > 60 : The trade unions successfully enforce the wage and recognition clauses, turning industrial revival into genuine worker gains. ?]
-
-@counter_with_wtb
-view-if: wtb_adopted = 1 or wtb_support >= 4
-choose-if: spd_in_government and labor_strength >= 55
-unavailable-subtitle: [? if not spd_in_government : We must be in government to propose alternative plans. ?] [? if labor_strength < 55 : We need stronger labor support to push our own economic agenda. ?] [? if wtb_adopted != 1 and wtb_support < 2 : We haven't built sufficient party support for the WTB-Plan. ?]
-on-arrival: wtb_implemented = 1; economic_plan = 1; schacht_relation += 5; left_dissent -= 10; labor_dissent -= 8; reformist_strength += 8; dvp_relation -= 5; unemployed -= 4.5; economic_growth += 1.7; workers_spd += 8*(1-dissent); pro_republic += 3; fiscal_stance -= 0.18; demand_impulse += 0.20; supply_impulse += 0.15; distribution_shift += 0.05; price_pressure += 0.04; budget -= 3;
-
-"We welcome the Reichsbank's willingness to support intervention," we respond, "but we propose our own plan—the WTB-Plan developed by our economists and trade unions. If Herr Schacht will provide the financial mechanisms, we will provide the economic strategy."
-
-It's an audacious move: accepting Schacht's offer of Reichsbank support while implementing labor's agenda rather than his nationalist program. Schacht is visibly torn—he needs government cooperation, and his own principles have shifted toward intervention, but this isn't what he envisioned.
-
-"The WTB-Plan is insufficiently focused on export competitiveness," he objects. "Too much consumption, not enough production."
-
-"The WTB-Plan addresses the consumption crisis causing the depression," we counter. "Your obsession with exports ignores that global trade has collapsed. Domestic demand must be revived first."
-
-Ultimately, Schacht provides the necessary Reichsbank support—credit expansion, suspension of certain gold standard restrictions, government bond purchases. But the substantive content is ours: massive public works, social housing, municipal infrastructure, support for consumer spending.
-
-It's the WTB-Plan implemented with establishment blessing—a stunning achievement. Unemployment falls sharply. Construction booms. Working-class districts see tangible improvements. The Republic demonstrates it can act decisively in workers' interests.
-
-The left wing is energized. "Finally! Democratic socialism in action!" Even reformists are proud—this is what SPD government should achieve. The trade unions mobilize support. Pro-republican sentiment strengthens.
-
-But the bourgeois parties are deeply uncomfortable. The DVP warns about "creeping socialism." Industrialists complain about insufficient emphasis on their sectors. And Schacht himself grows increasingly ambivalent about what he's enabled.
-
-[? if coalition_dissent > 5 : The coalition strains under the weight of implementing labor's economic vision. ?]
-
-@refuse_schacht
-choose-if: left_strength > reformist_strength + center_strength
-unavailable-subtitle: [? if left_strength <= reformist_strength + center_strength : The party lacks the left-wing strength to reject pragmatic cooperation with Schacht. ?]
-on-arrival: schacht_relation -= 20; left_strength += 10; left_dissent -= 15; reformist_dissent += 15; center_dissent += 10; dvp_relation -= 8; dnvp_relation -= 5; crisis_urgency += 1;
-
-"We appreciate the Reichsbank President's concern," we respond coolly, "but we will not implement nationalist economic planning under technocratic authority. If intervention is necessary, it must be democratic, socialist, and accountable to workers—not directed by an unelected banker."
-
-Schacht's expression hardens. "Then Germany will continue its descent into catastrophe. When unemployment reaches five million, remember you had an alternative." He gathers his papers and departs.
-
-The left wing celebrates our principled stand. "We've refused to become tools of nationalist reaction!" But even they recognize the practical problem: without Reichsbank cooperation, how can we implement our own economic agenda?
-
-The crisis deepens without intervention. Unemployment continues rising. The government lacks the financial mechanisms to act decisively. We've preserved ideological purity at the cost of practical impotence.
-
-The bourgeois press portrays us as dogmatic radicals who refused pragmatic solutions. Even some workers question why we rejected help when they desperately need jobs.
-
-Schacht returns to orthodox policies, his brief moment of flexibility hardened by rejection. The Reichsbank becomes actively obstructionist toward any government intervention. We've lost a potential, if problematic, ally.
-
-[? if reformist_strength > 30 : The reformist faction demands an emergency party conference. "We've let ideology trump practical responsibility!" ?]
-
-[? if unemployed > 20 : With unemployment catastrophic and government paralyzed, are we proving our critics right about SPD incompetence? ?]
+But the practical fallout is immediate and severe. The bourgeois parties, particularly the DVP, are furious and alienate themselves from the coalition. The right-wing press portrays the SPD as dogmatic radicals whose financial incompetence drove away Germany's greatest fiscal expert. Schacht himself is now completely unchained, embarking on international speaking tours to rail against reparations, eventually throwing his immense prestige behind the rising right-wing opposition. Without a cooperative Reichsbank, the government faces a deepening credit freeze just as the global depression begins to accelerate.

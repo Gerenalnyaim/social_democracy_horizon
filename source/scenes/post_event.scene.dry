@@ -5444,7 +5444,10 @@ Q.hindenburg_ready_to_dismiss = (
 
 
  // ============================================
-// BILL SYSTEM — POST EVENT TICK
+// BILL SYSTEM — POST EVENT TICK (REWORKED)
+// Repeatable bills with 40-turn cooldown.
+// No constitutional bill types.
+// 3 bills per party, relevant variables only.
 // ============================================
 
 // ============================================
@@ -5454,111 +5457,183 @@ Q.hindenburg_ready_to_dismiss = (
 var PARTY_BILLS = {
 
     KPD: [
-        { id: 'kpd_socialisation',   name: 'Socialisation of Heavy Industry',
-          type: 'economic',      ideo: 1, timer: 35, push_weight: 0.18, ministry: 'economic',
+        { id: 'kpd_socialisation',  name: 'Socialisation of Heavy Industry',
+          type: 'economic', ideo: 1, timer: 35, push_weight: 0.18, ministry: 'economic',
+          cooldown: 40,
           on_pass: function() { Q.socialization = (Q.socialization || 0) + 1; } },
-        { id: 'kpd_works_councils',  name: 'Revolutionary Works Councils Act',
-          type: 'labor',         ideo: 1, timer: 30, push_weight: 0.14, ministry: 'labor',
+        { id: 'kpd_works_councils', name: 'Revolutionary Works Councils Act',
+          type: 'labor',    ideo: 1, timer: 30, push_weight: 0.14, ministry: 'labor',
+          cooldown: 40,
           on_pass: function() { Q.works_councils = (Q.works_councils || 0) + 2; } },
+        { id: 'kpd_workers_aid',    name: 'Emergency Workers Relief Fund',
+          type: 'welfare',  ideo: 1, timer: 28, push_weight: 0.15, ministry: 'labor',
+          cooldown: 40,
+          on_pass: function() { Q.workers_aid = (Q.workers_aid || 0) + 1; Q.welfare = (Q.welfare || 0) + 1; } },
     ],
 
     SAPD: [
-        { id: 'sapd_land_reform',    name: 'Agricultural Land Reform',
-          type: 'economic',      ideo: 2, timer: 35, push_weight: 0.10, ministry: 'agriculture',
+        { id: 'sapd_land_reform',   name: 'Agricultural Land Reform',
+          type: 'economic', ideo: 2, timer: 35, push_weight: 0.10, ministry: 'agriculture',
+          cooldown: 40,
           on_pass: function() { Q.land_reform = (Q.land_reform || 0) + 1; } },
-        { id: 'sapd_cooperatives',   name: 'Worker Cooperative Promotion Act',
-          type: 'labor',         ideo: 2, timer: 30, push_weight: 0.12, ministry: 'economic',
+        { id: 'sapd_cooperatives',  name: 'Worker Cooperative Promotion Act',
+          type: 'labor',    ideo: 2, timer: 30, push_weight: 0.12, ministry: 'economic',
+          cooldown: 40,
           on_pass: function() { Q.cooperatives = (Q.cooperatives || 0) + 1; } },
+        { id: 'sapd_welfare_ext',   name: 'Welfare Extension Programme',
+          type: 'welfare',  ideo: 2, timer: 28, push_weight: 0.10, ministry: 'labor',
+          cooldown: 40,
+          on_pass: function() { Q.welfare = (Q.welfare || 0) + 1; Q.workers_aid = (Q.workers_aid || 0) + 1; } },
     ],
 
     SPD: [
-        { id: 'spd_workers_aid',     name: 'Unemployment Insurance Extension',
-          type: 'economic',      ideo: 3, timer: 30, push_weight: 0.20, ministry: 'labor',
+        { id: 'spd_workers_aid',    name: 'Unemployment Insurance Extension',
+          type: 'welfare',  ideo: 3, timer: 30, push_weight: 0.20, ministry: 'labor',
+          cooldown: 40,
           on_pass: function() { Q.workers_aid = (Q.workers_aid || 0) + 1; Q.welfare = (Q.welfare || 0) + 1; } },
-        { id: 'spd_wtb',             name: 'WTB Public Works Programme',
-          type: 'economic',      ideo: 3, timer: 45, push_weight: 0.16, ministry: 'economic',
+        { id: 'spd_wtb',            name: 'WTB Public Works Programme',
+          type: 'economic', ideo: 3, timer: 45, push_weight: 0.16, ministry: 'economic',
+          cooldown: 40,
           on_pass: function() { Q.state_buyer = (Q.state_buyer || 0) + 1; } },
+        { id: 'spd_womens_rights',  name: 'Women in the Workplace Act',
+          type: 'social',   ideo: 3, timer: 35, push_weight: 0.12, ministry: 'labor',
+          cooldown: 40,
+          on_pass: function() { Q.womens_rights = (Q.womens_rights || 0) + 1; Q.womens_work = (Q.womens_work || 0) + 1; } },
     ],
 
     DDP: [
-        { id: 'ddp_school_reform',   name: 'Secular School Reform',
-          type: 'social',        ideo: 5, timer: 40, push_weight: 0.12, ministry: 'interior',
+        { id: 'ddp_school_reform',  name: 'Secular School Reform',
+          type: 'social',   ideo: 5, timer: 40, push_weight: 0.12, ministry: 'interior',
+          cooldown: 40,
           on_pass: function() { Q.secularized = (Q.secularized || 0) + 1; Q.school_boards = (Q.school_boards || 0) + 1; } },
-        { id: 'ddp_constructive_vonc', name: 'Constructive Vote of No Confidence Act',
-          type: 'constitutional', ideo: 5, timer: 40, push_weight: 0.10, ministry: 'chancellor',
-          on_pass: function() { Q.constructive_vonc = (Q.constructive_vonc || 0) + 1; Q.constitutional_reform = (Q.constitutional_reform || 0) + 1; } },
+        { id: 'ddp_consumer',       name: 'Consumer Protection Reform',
+          type: 'economic', ideo: 5, timer: 30, push_weight: 0.10, ministry: 'economic',
+          cooldown: 40,
+          on_pass: function() { Q.pro_consumer = (Q.pro_consumer || 0) + 1; } },
+        { id: 'ddp_para_175',       name: 'Reform of Paragraph 175',
+          type: 'civil',    ideo: 5, timer: 45, push_weight: 0.08, ministry: 'justice',
+          cooldown: 50,
+          on_pass: function() { Q.homosexual_rights = (Q.homosexual_rights || 0) + 1; Q.reformed_183 = 1; } },
     ],
 
     Z: [
-        { id: 'z_concordat',         name: 'Church-State Concordat',
-          type: 'social',        ideo: 5, timer: 50, push_weight: 0.16, ministry: 'chancellor',
-          on_pass: function() { Q.prussian_concordate = 1; Q.reichskonkordat = 1; } },
-        { id: 'z_confessional',      name: 'Confessional Schools Protection',
-          type: 'social',        ideo: 5, timer: 40, push_weight: 0.14, ministry: 'interior',
+        { id: 'z_concordat',        name: 'Church-State Concordat',
+          type: 'social',   ideo: 5, timer: 50, push_weight: 0.16, ministry: 'chancellor',
+          cooldown: 60,
+          on_pass: function() { Q.prussian_concordate = 1; } },
+        { id: 'z_confessional',     name: 'Confessional Schools Protection',
+          type: 'social',   ideo: 5, timer: 40, push_weight: 0.14, ministry: 'interior',
+          cooldown: 40,
           on_pass: function() { Q.secularized = Math.max(0, (Q.secularized || 0) - 1); Q.school_boards = Math.max(0, (Q.school_boards || 0) - 1); } },
-    ],
-
-    BVP: [
-        { id: 'bvp_tariff',          name: 'Agricultural Import Tariff',
-          type: 'economic',      ideo: 6, timer: 30, push_weight: 0.14, ministry: 'agriculture',
-          on_pass: function() { Q.agricultural_finance = (Q.agricultural_finance || 0) + 1; } },
-        { id: 'bvp_family_law',      name: 'Catholic Family Law Protection',
-          type: 'social',        ideo: 6, timer: 35, push_weight: 0.12, ministry: 'justice',
+        { id: 'z_family_law',       name: 'Family Law Preservation Act',
+          type: 'social',   ideo: 6, timer: 35, push_weight: 0.12, ministry: 'justice',
+          cooldown: 40,
           on_pass: function() { Q.family_law = Math.max(0, (Q.family_law || 0) - 1); Q.abortion_rights = Math.max(0, (Q.abortion_rights || 0) - 1); } },
     ],
 
-    DVP: [
-        { id: 'dvp_tax_reform',      name: 'Business Tax Reduction',
-          type: 'economic',      ideo: 7, timer: 35, push_weight: 0.16, ministry: 'finance',
-          on_pass: function() { Q.pro_consumer = Math.max(0, (Q.pro_consumer || 0) - 1); } },
-        { id: 'dvp_trade_treaty',    name: 'Commercial Trade Treaty Act',
-          type: 'foreign',       ideo: 7, timer: 45, push_weight: 0.14, ministry: 'foreign',
-          on_pass: function() { Q.agricultural_finance = Math.max(0, (Q.agricultural_finance || 0) - 1); } },
-    ],
-
-    WP: [
-        { id: 'wp_middle_class',     name: 'Middle Class Credit Relief',
-          type: 'economic',      ideo: 7, timer: 30, push_weight: 0.14, ministry: 'finance',
-          on_pass: function() { Q.pro_consumer = (Q.pro_consumer || 0) + 1; } },
-        { id: 'wp_consumer_protect', name: 'Consumer Price Protection Act',
-          type: 'economic',      ideo: 7, timer: 25, push_weight: 0.12, ministry: 'finance',
-          on_pass: function() { Q.pro_consumer = (Q.pro_consumer || 0) + 1; } },
-    ],
-
-    CNBL: [
-        { id: 'cnbl_grain_tariff',   name: 'Emergency Grain Tariff',
-          type: 'economic',      ideo: 7, timer: 25, push_weight: 0.16, ministry: 'agriculture',
+    BVP: [
+        { id: 'bvp_tariff',         name: 'Agricultural Import Tariff',
+          type: 'economic', ideo: 6, timer: 30, push_weight: 0.14, ministry: 'agriculture',
+          cooldown: 40,
           on_pass: function() { Q.agricultural_finance = (Q.agricultural_finance || 0) + 1; } },
-        { id: 'cnbl_debt_relief',    name: 'Rural Debt Moratorium',
-          type: 'economic',      ideo: 7, timer: 35, push_weight: 0.14, ministry: 'agriculture',
+        { id: 'bvp_family_law',     name: 'Catholic Family Law Protection',
+          type: 'social',   ideo: 6, timer: 35, push_weight: 0.12, ministry: 'justice',
+          cooldown: 40,
+          on_pass: function() { Q.family_law = Math.max(0, (Q.family_law || 0) - 1); Q.abortion_rights = Math.max(0, (Q.abortion_rights || 0) - 1); } },
+        { id: 'bvp_land_reform',    name: 'Bavarian Rural Settlement Act',
+          type: 'economic', ideo: 6, timer: 35, push_weight: 0.10, ministry: 'agriculture',
+          cooldown: 40,
           on_pass: function() { Q.land_reform = (Q.land_reform || 0) + 1; Q.agricultural_finance = (Q.agricultural_finance || 0) + 1; } },
     ],
 
+    DVP: [
+        { id: 'dvp_tax_reform',     name: 'Business Tax Reduction',
+          type: 'economic', ideo: 7, timer: 35, push_weight: 0.16, ministry: 'finance',
+          cooldown: 40,
+          on_pass: function() { Q.pro_consumer = Math.max(0, (Q.pro_consumer || 0) - 1); } },
+        { id: 'dvp_trade_treaty',   name: 'Commercial Trade Treaty Act',
+          type: 'foreign',  ideo: 7, timer: 45, push_weight: 0.14, ministry: 'foreign',
+          cooldown: 40,
+          on_pass: function() { Q.agricultural_finance = Math.max(0, (Q.agricultural_finance || 0) - 1); } },
+        { id: 'dvp_consumer_cut',   name: 'Deregulation of Consumer Markets',
+          type: 'economic', ideo: 7, timer: 30, push_weight: 0.12, ministry: 'economic',
+          cooldown: 40,
+          on_pass: function() { Q.pro_consumer = Math.max(0, (Q.pro_consumer || 0) - 1); Q.state_buyer = Math.max(0, (Q.state_buyer || 0) - 1); } },
+    ],
+
+    WP: [
+        { id: 'wp_middle_class',    name: 'Middle Class Credit Relief',
+          type: 'economic', ideo: 7, timer: 30, push_weight: 0.14, ministry: 'finance',
+          cooldown: 40,
+          on_pass: function() { Q.pro_consumer = (Q.pro_consumer || 0) + 1; } },
+        { id: 'wp_consumer_protect',name: 'Consumer Price Protection Act',
+          type: 'economic', ideo: 7, timer: 25, push_weight: 0.12, ministry: 'finance',
+          cooldown: 40,
+          on_pass: function() { Q.pro_consumer = (Q.pro_consumer || 0) + 1; } },
+        { id: 'wp_debt_relief',     name: 'Small Business Debt Restructuring',
+          type: 'economic', ideo: 7, timer: 30, push_weight: 0.11, ministry: 'finance',
+          cooldown: 40,
+          on_pass: function() { Q.pro_consumer = (Q.pro_consumer || 0) + 1; Q.agricultural_finance = (Q.agricultural_finance || 0) + 1; } },
+    ],
+
+    CNBL: [
+        { id: 'cnbl_grain_tariff',  name: 'Emergency Grain Tariff',
+          type: 'economic', ideo: 7, timer: 25, push_weight: 0.16, ministry: 'agriculture',
+          cooldown: 40,
+          on_pass: function() { Q.agricultural_finance = (Q.agricultural_finance || 0) + 1; } },
+        { id: 'cnbl_debt_relief',   name: 'Rural Debt Moratorium',
+          type: 'economic', ideo: 7, timer: 35, push_weight: 0.14, ministry: 'agriculture',
+          cooldown: 40,
+          on_pass: function() { Q.land_reform = (Q.land_reform || 0) + 1; Q.agricultural_finance = (Q.agricultural_finance || 0) + 1; } },
+        { id: 'cnbl_settlement',    name: 'Eastern Settlement Programme',
+          type: 'economic', ideo: 7, timer: 40, push_weight: 0.10, ministry: 'agriculture',
+          cooldown: 40,
+          on_pass: function() { Q.land_reform = (Q.land_reform || 0) + 1; } },
+    ],
+
     DNVP: [
-        { id: 'dnvp_red_ban',        name: 'Anti-Marxist Emergency Law',
-          type: 'civil',         ideo: 9, timer: 30, push_weight: 0.16, ministry: 'interior',
+        { id: 'dnvp_red_ban',       name: 'Anti-Marxist Emergency Law',
+          type: 'civil',    ideo: 9, timer: 30, push_weight: 0.16, ministry: 'interior',
+          cooldown: 40,
           on_pass: function() { Q.rfb_banned = 1; Q.workers_aid = Math.max(0, (Q.workers_aid || 0) - 1); } },
-        { id: 'dnvp_presidential',   name: 'Presidential Powers Expansion Act',
-          type: 'constitutional', ideo: 9, timer: 25, push_weight: 0.18, ministry: 'chancellor',
-          on_pass: function() { Q.presidential_powers = Math.max(0, (Q.presidential_powers || 0) - 1); Q.constitutional_reform = Math.max(0, (Q.constitutional_reform || 0) - 1); } },
+        { id: 'dnvp_tariff',        name: 'Heavy Industry Tariff Wall',
+          type: 'economic', ideo: 9, timer: 30, push_weight: 0.14, ministry: 'economic',
+          cooldown: 40,
+          on_pass: function() { Q.pro_consumer = Math.max(0, (Q.pro_consumer || 0) - 1); Q.agricultural_finance = (Q.agricultural_finance || 0) + 1; } },
+        { id: 'dnvp_welfare_cut',   name: 'Welfare Austerity Measure',
+          type: 'welfare',  ideo: 9, timer: 25, push_weight: 0.14, ministry: 'finance',
+          cooldown: 40,
+          on_pass: function() { Q.welfare = Math.max(-2, (Q.welfare || 0) - 1); Q.workers_aid = Math.max(0, (Q.workers_aid || 0) - 1); } },
     ],
 
     NSDAP: [
-        { id: 'nsdap_enabling',      name: 'Emergency Powers Enabling Act',
-          type: 'constitutional', ideo: 10, timer: 30, push_weight: 0.20, ministry: 'chancellor',
-          on_pass: function() { Q.presidential_powers = Math.max(0, (Q.presidential_powers || 0) - 2); Q.constitutional_reform = Math.max(0, (Q.constitutional_reform || 0) - 2); Q.sa_banned = 0; } },
-        { id: 'nsdap_no_confidence', name: 'Vote of No Confidence',
-          type: 'constitutional', ideo: 10, timer: 20, push_weight: 0.22, ministry: 'chancellor',
-          on_pass: function() { Q.constructive_vonc = Math.max(0, (Q.constructive_vonc || 0) - 1); } },
+        { id: 'nsdap_rights_ban',   name: 'Suppression of Civil Liberties Act',
+          type: 'civil',    ideo: 10, timer: 30, push_weight: 0.20, ministry: 'interior',
+          cooldown: 40,
+          on_pass: function() { Q.homosexual_rights = Math.max(0, (Q.homosexual_rights || 0) - 2); Q.womens_rights = Math.max(0, (Q.womens_rights || 0) - 1); } },
+        { id: 'nsdap_labour_front', name: 'National Labour Front Act',
+          type: 'labor',    ideo: 10, timer: 25, push_weight: 0.18, ministry: 'labor',
+          cooldown: 40,
+          on_pass: function() { Q.works_councils = Math.max(0, (Q.works_councils || 0) - 2); Q.cooperatives = Math.max(0, (Q.cooperatives || 0) - 1); } },
+        { id: 'nsdap_agrarian',     name: 'Hereditary Farm Law',
+          type: 'economic', ideo: 10, timer: 30, push_weight: 0.16, ministry: 'agriculture',
+          cooldown: 40,
+          on_pass: function() { Q.land_reform = Math.max(0, (Q.land_reform || 0) - 1); Q.agricultural_finance = (Q.agricultural_finance || 0) + 1; } },
     ],
 
     DVFP: [
-        { id: 'dvfp_volkisch',       name: 'Völkisch Community Protection Act',
-          type: 'civil',         ideo: 10, timer: 30, push_weight: 0.14, ministry: 'interior',
+        { id: 'dvfp_volkisch',      name: 'Völkisch Community Protection Act',
+          type: 'civil',    ideo: 10, timer: 30, push_weight: 0.14, ministry: 'interior',
+          cooldown: 40,
           on_pass: function() { Q.homosexual_rights = Math.max(0, (Q.homosexual_rights || 0) - 1); Q.womens_rights = Math.max(0, (Q.womens_rights || 0) - 1); } },
-        { id: 'dvfp_republic_guilt', name: 'November Criminals Motion',
-          type: 'constitutional', ideo: 10, timer: 20, push_weight: 0.12, ministry: 'chancellor',
-          on_pass: function() { Q.constitutional_reform = Math.max(0, (Q.constitutional_reform || 0) - 1); } },
+        { id: 'dvfp_foreign_cut',   name: 'Treaty Obligations Rejection Motion',
+          type: 'foreign',  ideo: 10, timer: 25, push_weight: 0.12, ministry: 'foreign',
+          cooldown: 40,
+          on_pass: function() { Q.west_relation = Math.max(-100, (Q.west_relation || 0) - 3); } },
+        { id: 'dvfp_welfare_cut',   name: 'Racial Welfare Restriction Act',
+          type: 'welfare',  ideo: 10, timer: 28, push_weight: 0.13, ministry: 'interior',
+          cooldown: 40,
+          on_pass: function() { Q.welfare = Math.max(-2, (Q.welfare || 0) - 1); Q.workers_aid = Math.max(0, (Q.workers_aid || 0) - 1); } },
     ],
 };
 
@@ -5628,7 +5703,23 @@ function get_push_multiplier(party) {
 }
 
 // ============================================
-// SECTION C: PHASE 1A — TIMER DECAY
+// SECTION C: PHASE 1A — COOLDOWN TICK
+// Decrement per-bill cooldowns each turn.
+// ============================================
+
+var _all_parties = Object.keys(PARTY_BILLS);
+for (var pi = 0; pi < _all_parties.length; pi++) {
+    var _pool = PARTY_BILLS[_all_parties[pi]];
+    for (var bi = 0; bi < _pool.length; bi++) {
+        var _id = _pool[bi].id;
+        if (Q['bill_cd_' + _id] > 0) {
+            Q['bill_cd_' + _id]--;
+        }
+    }
+}
+
+// ============================================
+// SECTION D: PHASE 1B — TIMER DECAY
 // ============================================
 
 for (var i = 0; i < 10; i++) {
@@ -5644,9 +5735,7 @@ for (var i = 0; i < 10; i++) {
 }
 
 // ============================================
-// SECTION D: PHASE 1B — CRISIS STAGING
-// Only picks a new bill if no crisis in progress.
-// Staging vars are never touched while one is active.
+// SECTION E: PHASE 1C — CRISIS STAGING
 // ============================================
 
 if (!Q.bill_crisis_in_progress) {
@@ -5671,8 +5760,8 @@ if (!Q.bill_crisis_in_progress) {
 }
 
 // ============================================
-// SECTION E: PHASE 1C — PRNG PUSH LOOP
-// Runs always — crisis does not block new bills.
+// SECTION F: PHASE 1D — PRNG PUSH LOOP
+// Skips bills still on cooldown.
 // ============================================
 
 var _push_parties = Object.keys(PARTY_BILLS);
@@ -5684,7 +5773,6 @@ for (var pi = 0; pi < _push_parties.length; pi++) {
 
     if (_mult <= 0) continue;
 
-    // Find empty slot before rolling
     var _slot = -1;
     for (var si = 0; si < 10; si++) {
         if (!Q['bill_' + si + '_id']) { _slot = si; break; }
@@ -5696,11 +5784,14 @@ for (var pi = 0; pi < _push_parties.length; pi++) {
     for (var bi = 0; bi < _shuffled.length; bi++) {
         var _bill = _shuffled[bi];
 
-        if (Q['bill_done_' + _bill.id])      continue; // already resolved
-        if (Q.crisis_id === _bill.id)        continue; // in staging
-        if (Q['bill_stall_id'] === _bill.id) continue; // in stall
+        // Skip if on cooldown
+        if ((Q['bill_cd_' + _bill.id] || 0) > 0) continue;
 
-        // Check if already in queue
+        // Skip if currently staged as crisis or in stall
+        if (Q.crisis_id === _bill.id)        continue;
+        if (Q['bill_stall_id'] === _bill.id) continue;
+
+        // Skip if already in queue
         var _already = false;
         for (var qi = 0; qi < 10; qi++) {
             if (Q['bill_' + qi + '_id'] === _bill.id) { _already = true; break; }
@@ -5716,13 +5807,16 @@ for (var pi = 0; pi < _push_parties.length; pi++) {
             Q['bill_' + _slot + '_timer']    = _bill.timer;
             Q['bill_' + _slot + '_frozen']   = 0;
             Q['bill_' + _slot + '_ministry'] = _bill.ministry;
+            // Set cooldown immediately so the same bill can't double-push this tick
+            Q['bill_cd_' + _bill.id]         = _bill.cooldown;
             break;
         }
     }
 }
 
 // ============================================
-// SECTION F: STALL TIMER TICK
+// SECTION G: STALL TIMER TICK
+// On resolution/death, cooldown is applied.
 // ============================================
 
 if (Q.bill_stall_timer > 0) {
@@ -5731,14 +5825,16 @@ if (Q.bill_stall_timer > 0) {
     if (Q.bill_stall_timer <= 0) {
 
         if ((Q.bill_stall_attempt || 0) >= 2) {
-            // Second stall expired — bill dies
-            var _sp      = Q.bill_stall_party || '';
-            var _diss_k  = _sp.toLowerCase() + '_dissent';
-            var _rel_k   = _sp.toLowerCase() + '_relation';
-            Q[_diss_k]   = Math.min(99,   (Q[_diss_k] || 0)  + 3);
-            Q[_rel_k]    = Math.max(-100, (Q[_rel_k]  || 50) - 4);
+            // Second stall expired — bill dies, cooldown applied
+            var _sp     = Q.bill_stall_party || '';
+            var _diss_k = _sp.toLowerCase() + '_dissent';
+            var _rel_k  = _sp.toLowerCase() + '_relation';
+            Q[_diss_k]  = Math.min(99,   (Q[_diss_k] || 0)  + 3);
+            Q[_rel_k]   = Math.max(-100, (Q[_rel_k]  || 50) - 4);
 
-            Q.bill_done_[Q.bill_stall_id] = 1;
+            // Apply cooldown so it can return after 40+ turns
+            Q['bill_cd_' + Q.bill_stall_id] = 40;
+
             Q.bill_stall_id       = '';
             Q.bill_stall_name     = '';
             Q.bill_stall_party    = '';
@@ -5749,7 +5845,7 @@ if (Q.bill_stall_timer > 0) {
             Q.bill_stall_attempt  = 0;
 
         } else if (!Q.bill_crisis_in_progress) {
-            // Re-surface for second ratification attempt via crisis staging
+            // Re-surface for second ratification attempt
             Q.crisis_slot     = -1;
             Q.crisis_id       = Q.bill_stall_id;
             Q.crisis_name     = Q.bill_stall_name;
@@ -5773,7 +5869,27 @@ if (Q.bill_stall_timer > 0) {
 }
 
 // ============================================
-// SECTION G: BUILD DISPLAY VARS
+// SECTION H: ON_PASS HOOK — call after player
+// resolves a crisis. Apply cooldown on passage.
+// Usage: bill_resolve(Q.crisis_id)
+// ============================================
+
+function bill_resolve(bill_id) {
+    var _parties = Object.keys(PARTY_BILLS);
+    for (var pi = 0; pi < _parties.length; pi++) {
+        var _pool = PARTY_BILLS[_parties[pi]];
+        for (var bi = 0; bi < _pool.length; bi++) {
+            if (_pool[bi].id === bill_id) {
+                _pool[bi].on_pass();
+                Q['bill_cd_' + bill_id] = _pool[bi].cooldown;
+                return;
+            }
+        }
+    }
+}
+
+// ============================================
+// SECTION I: BUILD DISPLAY VARS
 // ============================================
 
 var _text = '';
@@ -5787,13 +5903,12 @@ _html += '<tr style="border-bottom:1px solid #555;">'
        + '</tr>';
 
 var TYPE_COLORS = {
-    economic:       '#c8a84b',
-    labor:          '#e3000f',
-    social:         '#a0c4a0',
-    civil:          '#7eb8d4',
-    foreign:        '#9b8ec4',
-    constitutional: '#d47f7f',
-    administrative: '#b0b0b0',
+    economic: '#c8a84b',
+    labor:    '#e3000f',
+    social:   '#a0c4a0',
+    civil:    '#7eb8d4',
+    foreign:  '#9b8ec4',
+    welfare:  '#c47fd4',
 };
 
 var _filled = 0;
@@ -5806,9 +5921,9 @@ for (var i = 0; i < 10; i++) {
     var _type   = Q['bill_' + i + '_type'];
     var _timer  = Q['bill_' + i + '_timer'];
     var _frozen = Q['bill_' + i + '_frozen'];
-    var _status = _frozen          ? '⚠ Crisis'  :
-                  _timer <= 1      ? '🔴 Urgent'  :
-                  _timer <= 5      ? '🟡 Soon'    : '🟢 Active';
+    var _status = _frozen      ? '⚠ Crisis' :
+                  _timer <= 1  ? '🔴 Urgent' :
+                  _timer <= 5  ? '🟡 Soon'   : '🟢 Active';
     var _color  = TYPE_COLORS[_type] || '#888';
 
     _text += (i+1) + '. ' + _name + ' (' + _party + ') — '
@@ -5839,18 +5954,15 @@ Q.bill_queue_full  = (_filled >= 10) ? 1 : 0;
 
 Q.bill_proposed_this_month = 0;
 
+
+
+
+
+
+
+
+
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -5955,6 +6067,12 @@ if (Q.april_challenge === 1 && Q.year >= 1933 && Q.month >= 10) {
     Q.para_bloc_right    = para_share.stahlhelm + para_share.sa;
     Q.para_bloc_military = para_share.reichswehr;
 }
+
+
+
+
+
+
 
 
 
