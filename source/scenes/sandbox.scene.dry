@@ -8,13 +8,10 @@ go-to: sandbox_menu
 
 @sandbox_menu
 
-- @secretmode: Secret Mode
-- @wacky: All wacky things (unlocked when reaching 1935)
-- @technical: Technical things, just messing with variables.
 - @party_rename_menu: Change Party Name
-- @truesandbox
+- @debug: Debug Console
 - @developermode: Developer Mode
-- @debug: Purest Debug
+- @sandbox_menu: Back to Menu
 
 @party_rename_menu
 title: Change Party Name
@@ -100,7 +97,7 @@ Party name reset to **SPD**.
 @debug
 on-arrival: {!
 
-console.log("=== INVERTED CHALLENGE DEBUG ===");
+console.log("=== SANDBOX DEBUG ===");
 
 // 1. PARTIES ARRAY
 console.log("1. Q.parties:", JSON.stringify(Q.parties));
@@ -127,110 +124,24 @@ console.log("2. MISSING class vars:", JSON.stringify(debug_missing));
 console.log("2. NaN class vars:", JSON.stringify(debug_nan));
 console.log("2. Zero class vars:", JSON.stringify(debug_zero));
 
-// 3. PARTY RELATIONS
-if (!Q.party_relations) {
-    console.log("3. party_relations: UNDEFINED OR NULL");
-} else {
-    var pr_keys = Object.keys(Q.party_relations);
-    console.log("3. party_relations top keys:", JSON.stringify(pr_keys));
-    var pr_missing = [];
-    var pr_nan = [];
-    var pr_zero = [];
-    for (var pk = 0; pk < pr_keys.length; pk++) {
-        var p1 = pr_keys[pk];
-        var p2_keys = Object.keys(Q.party_relations[p1]);
-        for (var pl = 0; pl < p2_keys.length; pl++) {
-            var p2 = p2_keys[pl];
-            var pr_val = Q.party_relations[p1][p2];
-            if (pr_val === undefined || pr_val === null) pr_missing.push(p1+'->'+p2);
-            else if (isNaN(pr_val)) pr_nan.push(p1+'->'+p2+'=NaN');
-            else if (pr_val === 0) pr_zero.push(p1+'->'+p2+'=0');
-        }
-    }
-    console.log("3. party_relations MISSING:", JSON.stringify(pr_missing));
-    console.log("3. party_relations NaN:", JSON.stringify(pr_nan));
-    console.log("3. party_relations Zero:", JSON.stringify(pr_zero));
-}
-
-// 4. COALITION BLOCKS
-if (!Q.coalition_blocks) {
-    console.log("4. coalition_blocks: UNDEFINED OR NULL");
-} else {
-    var cb_keys = Object.keys(Q.coalition_blocks);
-    var cb_weird = [];
-    for (var ci = 0; ci < cb_keys.length; ci++) {
-        var cb_val = Q.coalition_blocks[cb_keys[ci]];
-        if (cb_val !== true && cb_val !== false) cb_weird.push(cb_keys[ci] + '=' + cb_val);
-    }
-    console.log("4. coalition_blocks total keys:", cb_keys.length);
-    console.log("4. coalition_blocks non-boolean:", JSON.stringify(cb_weird));
-}
-
-// 5. CHALLENGE FLAGS
-console.log("5. inverted_challenge:", Q.inverted_challenge);
-console.log("5. gang_challenge:", Q.gang_challenge);
-console.log("5. spartac_challenge:", Q.spartac_challenge);
-console.log("5. duel_challenge:", Q.duel_challenge);
-console.log("5. dice_challenge:", Q.dice_challenge);
-console.log("5. vn_challenge:", Q.vn_challenge);
-console.log("5. dem_challenge:", Q.dem_challenge);
-console.log("5. cmr_challenge:", Q.cmr_challenge);
-console.log("5. new_partei_challenge:", Q.new_partei_challenge);
-console.log("5. peasant_revolution:", Q.peasant_revolution);
-console.log("5. april_challenge:", Q.april_challenge);
-console.log("5. hindenburg_challenge:", Q.hindenburg_challenge);
-
-// 6. REICHSTAG _r VARS
-var r_missing = [];
-var r_nan = [];
-for (var ri = 0; ri < debug_parties.length; ri++) {
-    var r_key = debug_parties[ri] + '_r';
-    var r_val = Q[r_key];
-    if (r_val === undefined || r_val === null) r_missing.push(r_key);
-    else if (isNaN(r_val)) r_nan.push(r_key + '=NaN');
-    else console.log("6. " + r_key + " =", r_val);
-}
-console.log("6. MISSING _r vars:", JSON.stringify(r_missing));
-console.log("6. NaN _r vars:", JSON.stringify(r_nan));
-
-// 7. RELATION VARS
-var rel_missing = [];
-var rel_nan = [];
-for (var reli = 0; reli < debug_parties.length; reli++) {
-    var rel_key = debug_parties[reli] + '_relation';
-    var rel_val = Q[rel_key];
-    if (rel_val === undefined || rel_val === null) rel_missing.push(rel_key);
-    else if (isNaN(rel_val)) rel_nan.push(rel_key + '=NaN');
-    else console.log("7. " + rel_key + " =", rel_val);
-}
-console.log("7. MISSING _relation vars:", JSON.stringify(rel_missing));
-console.log("7. NaN _relation vars:", JSON.stringify(rel_nan));
-
-// 8. FULL NaN SWEEP
-var all_nan_keys = [];
-var q_keys = Object.keys(Q);
-for (var qi = 0; qi < q_keys.length; qi++) {
-    if (typeof Q[q_keys[qi]] === 'number' && isNaN(Q[q_keys[qi]])) {
-        all_nan_keys.push(q_keys[qi]);
-    }
-}
-console.log("8. ALL NaN keys in Q:", JSON.stringify(all_nan_keys));
-
-// 9. CRITICAL VARS
+// 3. CRITICAL VARS
 var crit_list = ['workers','old_middle','new_middle','rural','unemployed',
     'nationalism','socialism','pro_republic',
     'spd_r','kpd_r','z_r','ddp_r','dvp_r','dnvp_r','nsdap_r',
     'budget','resources','dissent'];
 for (var cri = 0; cri < crit_list.length; cri++) {
     var crit_val = Q[crit_list[cri]];
-    if (crit_val === undefined) console.log("9. MISSING: " + crit_list[cri]);
-    else if (isNaN(crit_val)) console.log("9. NaN: " + crit_list[cri]);
-    else console.log("9. OK: " + crit_list[cri] + " =", crit_val);
+    if (crit_val === undefined) console.log("3. MISSING: " + crit_list[cri]);
+    else if (isNaN(crit_val)) console.log("3. NaN: " + crit_list[cri]);
+    else console.log("3. OK: " + crit_list[cri] + " =", crit_val);
 }
 
 console.log("=== DEBUG COMPLETE ===");
 !}
-go-to: sandbox_menu
+
+Debug information has been logged to the console.
+
+- @sandbox_menu: Back
 
 @developermode
 on-display: {!
@@ -281,7 +192,6 @@ container.appendChild(btn);
 container.appendChild(msg);
 
 !}
-go-to: sandbox_menu
 
 = Developer Console
 
@@ -289,30 +199,4 @@ go-to: sandbox_menu
 
 [? if developer_mode = 1 : **Developer mode is active.** ?]
 
-- @sandbox_menu: Back
-
-@truesandbox
-title: True Sandbox
-
-Here.
-
-- @kpd: KPD normalization (50 relation, communist coalition 6)
-- @coup: Launch right coup
-- @strike: Launch capital strike
-- @generale: Launch general strike
-- @hinden: Hindenburg patience
-- @dvpposition: Change DVP orientation
-- @dnvpposition: Change DNVP orientation
-- @changeddp: Change DDP orientation
-- @relaton: Relationships menu
-- @budge: Budget and economics
-- @dissent: Party dissents
-- @class_votes: Class popularities of parties
-- @party: Internal party - strength - dissent
-- @forces: Forces
-- @bans: Party Ban Statuses
-- @advisor: Advisor Action Timer
-- @fastforward: Skip two weeks
-- @bypasshistoricalsaves: Historical mode saves removed
-- @kill_me: Set time
 - @sandbox_menu: Back
