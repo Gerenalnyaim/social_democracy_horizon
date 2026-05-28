@@ -8,10 +8,9 @@ go-to: sandbox_menu
 
 @sandbox_menu
 
-- @party_rename_menu: Change Party Name
+- @sandbox_party_rename.party_rename_menu: Change Party Name
 - @debug: Debug Console
 - @developermode: Developer Mode
-- @sandbox_menu: Back to Menu
 
 @party_rename_menu
 title: Change Party Name
