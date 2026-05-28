@@ -9,7 +9,7 @@ Current party name: **[+ spd_custom_name +]**
 
 - @party_rename_input: Change party name
 - @party_rename_reset: Reset to default (SPD)
-- @truesandbox: Back
+- @sandbox_menu: Back
 
 @party_rename_input
 on-display: {!
