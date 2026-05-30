@@ -9,7 +9,7 @@ Current party name: **[+ spd_custom_name +]**
 
 - @party_rename_input: Change party name
 - @party_rename_reset: Reset to default (SPD)
-- @sandbox_menu: Back
+- @sandbox.sandbox_menu: Back
 
 @party_rename_input
 on-display: {!
@@ -49,7 +49,7 @@ confirmBtn.addEventListener('click', function() {
         console.log("Party renamed to: " + Q.spd_custom_name);
         container.innerHTML = '<p style="color: green; font-weight: bold;">✓ Party renamed to <strong>' + Q.spd_custom_name + '</strong></p>';
         setTimeout(function() {
-            window.dendryUI.dendryEngine.goToScene('party_rename_menu');
+            window.dendryUI.dendryEngine.goToScene('sandbox_party_rename.party_rename_menu');
         }, 1500);
     } else {
         var errorMsg = document.createElement('p');
@@ -60,7 +60,7 @@ confirmBtn.addEventListener('click', function() {
 });
 
 cancelBtn.addEventListener('click', function() {
-    window.dendryUI.dendryEngine.goToScene('party_rename_menu');
+    window.dendryUI.dendryEngine.goToScene('sandbox_party_rename.party_rename_menu');
 });
 
 container.appendChild(label);
