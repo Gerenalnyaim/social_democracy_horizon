@@ -1,0 +1,515 @@
+title: Party Creator
+new-page: true
+go-to: menu
+on-arrival: {!
+window.enableFocusMode()
+!}
+
+= Party Creator
+
+Create custom political parties for sandbox mode with custom colors and political positions.
+
+@menu
+
+- @create_basic: Create a New Party
+- @preset_parties: Browse Preset Parties
+- @party_list: View Created Parties
+- @backSpecialScene: Back to Library
+
+@create_basic
+new-page: true
+
+= Create a New Party
+
+Define your party's characteristics below:
+
+**Party Name:**
+[!
+Q.new_party_name = Q.new_party_name || "";
+!]
+
+- @color_input: Choose Party Color (RGB)
+
+**Political Position:**
+Drag the slider to position your party on the left-right spectrum.
+
+- @position_input: Set Political Position
+
+- @party_options: Additional Options
+- @create_party: Create Party
+- @menu: Cancel
+
+@color_input
+new-page: true
+
+= Choose Party Color
+
+Select your party's color using RGB values (0-255 for each channel).
+
+[!
+Q.party_r = Q.party_r || 200;
+Q.party_g = Q.party_g || 50;
+Q.party_b = Q.party_b || 50;
+!]
+
+Red (0-255): [+ Q.party_r +]
+
+[? if Q.show_color_preview:
+<div style="display: inline-block; background-color: rgb([+Q.party_r+], [+Q.party_g+], [+Q.party_b+]); width: 100px; height: 100px; border: 2px solid #333; margin: 10px 0;"></div>
+?]
+
+- **Adjust Red:**
+  - @red_increase: Increase Red
+  - @red_decrease: Decrease Red
+
+Green (0-255): [+ Q.party_g +]
+
+- **Adjust Green:**
+  - @green_increase: Increase Green
+  - @green_decrease: Decrease Green
+
+Blue (0-255): [+ Q.party_b +]
+
+- **Adjust Blue:**
+  - @blue_increase: Increase Blue
+  - @blue_decrease: Decrease Blue
+
+Color Preview (Hex): #[!
+var toHex = function(n) { return n.toString(16).padStart(2, '0'); };
+Q.party_color_hex = toHex(Q.party_r) + toHex(Q.party_g) + toHex(Q.party_b);
+!][+ Q.party_color_hex +]
+
+- @position_input: Continue to Position
+- @create_basic: Back
+
+@red_increase
+on-arrival: {!
+Q.party_r = Math.min(255, Q.party_r + 10);
+Q.show_color_preview = 1;
+!}
+go-to: color_input
+
+@red_decrease
+on-arrival: {!
+Q.party_r = Math.max(0, Q.party_r - 10);
+Q.show_color_preview = 1;
+!}
+go-to: color_input
+
+@green_increase
+on-arrival: {!
+Q.party_g = Math.min(255, Q.party_g + 10);
+Q.show_color_preview = 1;
+!}
+go-to: color_input
+
+@green_decrease
+on-arrival: {!
+Q.party_g = Math.max(0, Q.party_g - 10);
+Q.show_color_preview = 1;
+!}
+go-to: color_input
+
+@blue_increase
+on-arrival: {!
+Q.party_b = Math.min(255, Q.party_b + 10);
+Q.show_color_preview = 1;
+!}
+go-to: color_input
+
+@blue_decrease
+on-arrival: {!
+Q.party_b = Math.max(0, Q.party_b - 10);
+Q.show_color_preview = 1;
+!}
+go-to: color_input
+
+@position_input
+new-page: true
+
+= Set Political Position
+
+Position your party on the political spectrum from -100 (Far Left) to +100 (Far Right).
+
+[!
+Q.party_position = Q.party_position || 0;
+
+var getIdeologyLabel = function(pos) {
+    if (pos <= -75) return "Far-Left Communist";
+    if (pos <= -50) return "Left Socialist";
+    if (pos <= -25) return "Centre-Left Progressive";
+    if (pos <= -5) return "Centre-Left";
+    if (pos <= 5) return "Centre";
+    if (pos <= 25) return "Centre-Right";
+    if (pos <= 50) return "Right Conservative";
+    if (pos <= 75) return "Far-Right";
+    return "Ultra-Right";
+};
+
+Q.party_ideology = getIdeologyLabel(Q.party_position);
+!}
+
+Current Position: [+ Q.party_position +]
+
+Ideology: **[+ Q.party_ideology +]**
+
+- **Move Left:**
+  - @position_far_left: Far Left (-100)
+  - @position_left: Left (-50)
+  - @position_center_left: Centre-Left (-25)
+
+- **Center:**
+  - @position_center: Centre (0)
+
+- **Move Right:**
+  - @position_center_right: Centre-Right (+25)
+  - @position_right: Right (+50)
+  - @position_far_right: Far-Right (+85)
+
+- @party_options: Continue to Options
+- @color_input: Back to Color Selection
+
+@position_far_left
+on-arrival: {!
+Q.party_position = -100;
+!}
+go-to: position_input
+
+@position_left
+on-arrival: {!
+Q.party_position = -50;
+!}
+go-to: position_input
+
+@position_center_left
+on-arrival: {!
+Q.party_position = -25;
+!}
+go-to: position_input
+
+@position_center
+on-arrival: {!
+Q.party_position = 0;
+!}
+go-to: position_input
+
+@position_center_right
+on-arrival: {!
+Q.party_position = 25;
+!}
+go-to: position_input
+
+@position_right
+on-arrival: {!
+Q.party_position = 50;
+!}
+go-to: position_input
+
+@position_far_right
+on-arrival: {!
+Q.party_position = 85;
+!}
+go-to: position_input
+
+@party_options
+new-page: true
+
+= Party Options
+
+Configure optional details for your party.
+
+**Party Name:** (Required)
+
+[!
+Q.new_party_name = Q.new_party_name || "";
+!]
+
+- @name_input: Set Party Name
+- @name_random: Generate Random Name
+
+**Party Leader:** (Optional)
+
+[!
+Q.new_party_leader = Q.new_party_leader || "";
+!]
+
+- @leader_input: Set Party Leader Name
+
+**Party Description:** (Optional)
+
+[!
+Q.new_party_description = Q.new_party_description || "";
+!]
+
+- @description_input: Set Party Description
+
+---
+
+**Summary:**
+- Name: [? if Q.new_party_name: [+ Q.new_party_name +] ?][? if not Q.new_party_name: (Not set) ?]
+- Color: rgb([+ Q.party_r +], [+ Q.party_g +], [+ Q.party_b +])
+- Position: [+ Q.party_position +] ([+ Q.party_ideology +])
+- Leader: [? if Q.new_party_leader: [+ Q.new_party_leader +] ?][? if not Q.new_party_leader: (Not set) ?]
+
+- @create_party: Create This Party
+- @position_input: Back
+
+@name_input
+
+Please enter your party name:
+(Note: In actual game, this would be a text input field)
+
+- @name_example_1: Social Democratic Union
+- @name_example_2: People's Alliance
+- @name_example_3: Worker's Front
+- @name_example_4: National Party
+- @party_options: Back
+
+@name_example_1
+on-arrival: {!
+Q.new_party_name = "Social Democratic Union";
+!}
+go-to: party_options
+
+@name_example_2
+on-arrival: {!
+Q.new_party_name = "People's Alliance";
+!}
+go-to: party_options
+
+@name_example_3
+on-arrival: {!
+Q.new_party_name = "Worker's Front";
+!}
+go-to: party_options
+
+@name_example_4
+on-arrival: {!
+Q.new_party_name = "National Party";
+!}
+go-to: party_options
+
+@name_random
+on-arrival: {!
+var adjectives = ["New", "Free", "Democratic", "Revolutionary", "Progressive", "Socialist", "National", "People's", "Workers'", "Citizens'"];
+var nouns = ["Union", "Alliance", "Front", "Party", "Movement", "Coalition", "Federation", "Association", "Congress", "League"];
+var adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+var noun = nouns[Math.floor(Math.random() * nouns.length)];
+Q.new_party_name = adj + " " + noun;
+!}
+go-to: party_options
+
+@leader_input
+
+Enter a party leader name:
+
+- @leader_example_1: Use a historical figure
+- @party_options: Back
+
+@leader_example_1
+
+(In a full implementation, this would allow text input)
+
+- @party_options: Back
+
+@description_input
+
+Enter a party description:
+
+- @party_options: Back
+
+@create_party
+on-arrival: {!
+if (!Q.custom_parties) {
+    Q.custom_parties = [];
+}
+
+if (!Q.new_party_name) {
+    Q.new_party_name = "New Party";
+}
+
+var newParty = {
+    name: Q.new_party_name,
+    color: {
+        r: Q.party_r || 200,
+        g: Q.party_g || 50,
+        b: Q.party_b || 50
+    },
+    position: Q.party_position || 0,
+    leader: Q.new_party_leader || "",
+    description: Q.new_party_description || "",
+    created_at: new Date().toLocaleDateString(),
+    color_hex: Q.party_color_hex || "C83232"
+};
+
+Q.custom_parties.push(newParty);
+
+// Reset form
+Q.new_party_name = "";
+Q.party_position = 0;
+Q.party_r = 200;
+Q.party_g = 50;
+Q.party_b = 50;
+Q.new_party_leader = "";
+Q.new_party_description = "";
+!}
+go-to: party_created
+
+@party_created
+new-page: true
+
+= Party Created Successfully!
+
+Your new party has been added to the party list.
+
+[? if Q.custom_parties and Q.custom_parties.length > 0:
+**Latest Party:**
+- Name: [+ Q.custom_parties[Q.custom_parties.length - 1].name +]
+- Position: [+ Q.custom_parties[Q.custom_parties.length - 1].position +]
+- Ideology: [+ Q.custom_parties[Q.custom_parties.length - 1].color_hex +]
+?]
+
+- @create_basic: Create Another
+- @party_list: View All Parties
+- @menu: Back to Menu
+
+@preset_parties
+new-page: true
+
+= Preset Party Templates
+
+Choose from pre-configured parties or customize them.
+
+**Left-Wing Presets:**
+
+- @preset_communist: Far-Left Communist (Red #C80000)
+- @preset_socialist: Left Socialist (Red #FF0000)
+- @preset_center_left: Centre-Left Progressive (Orange #FF8C00)
+
+**Center Presets:**
+
+- @preset_center: Centre (Green #64C864)
+- @preset_center_right: Centre-Right (Blue #0064C8)
+
+**Right-Wing Presets:**
+
+- @preset_conservative: Right Conservative (Dark Blue #003296)
+- @preset_far_right: Far-Right (Gray #323232)
+
+- @menu: Back
+
+@preset_communist
+on-arrival: {!
+Q.party_r = 200;
+Q.party_g = 0;
+Q.party_b = 0;
+Q.party_position = -90;
+Q.new_party_name = "Far-Left Communist";
+!}
+go-to: party_options
+
+@preset_socialist
+on-arrival: {!
+Q.party_r = 255;
+Q.party_g = 0;
+Q.party_b = 0;
+Q.party_position = -60;
+Q.new_party_name = "Left Socialist";
+!}
+go-to: party_options
+
+@preset_center_left
+on-arrival: {!
+Q.party_r = 255;
+Q.party_g = 140;
+Q.party_b = 0;
+Q.party_position = -25;
+Q.new_party_name = "Centre-Left Progressive";
+!}
+go-to: party_options
+
+@preset_center
+on-arrival: {!
+Q.party_r = 100;
+Q.party_g = 200;
+Q.party_b = 100;
+Q.party_position = 0;
+Q.new_party_name = "Centre Party";
+!}
+go-to: party_options
+
+@preset_center_right
+on-arrival: {!
+Q.party_r = 0;
+Q.party_g = 100;
+Q.party_b = 200;
+Q.party_position = 25;
+Q.new_party_name = "Centre-Right";
+!}
+go-to: party_options
+
+@preset_conservative
+on-arrival: {!
+Q.party_r = 0;
+Q.party_g = 50;
+Q.party_b = 150;
+Q.party_position = 60;
+Q.new_party_name = "Right Conservative";
+!}
+go-to: party_options
+
+@preset_far_right
+on-arrival: {!
+Q.party_r = 50;
+Q.party_g = 50;
+Q.party_b = 50;
+Q.party_position = 85;
+Q.new_party_name = "Far-Right";
+!}
+go-to: party_options
+
+@party_list
+new-page: true
+
+= Created Parties
+
+[? if not Q.custom_parties or Q.custom_parties.length == 0:
+No parties created yet.
+?]
+
+[? if Q.custom_parties and Q.custom_parties.length > 0:
+
+{!
+var partyListHTML = "<table style='width:100%; border-collapse: collapse;'><tr style='border-bottom: 2px solid #333;'><td style='padding:8px; font-weight:bold;'>Name</td><td style='padding:8px; font-weight:bold;'>Position</td><td style='padding:8px; font-weight:bold;'>Ideology</td><td style='padding:8px; font-weight:bold;'>Color</td><td style='padding:8px; font-weight:bold;'>Leader</td></tr>";
+
+Q.custom_parties.forEach(function(party, index) {
+    var ideologyLabel = "";
+    if (party.position <= -75) ideologyLabel = "Far-Left";
+    else if (party.position <= -50) ideologyLabel = "Left";
+    else if (party.position <= -25) ideologyLabel = "Centre-Left";
+    else if (party.position <= 5) ideologyLabel = "Centre";
+    else if (party.position <= 25) ideologyLabel = "Centre-Right";
+    else if (party.position <= 50) ideologyLabel = "Right";
+    else ideologyLabel = "Far-Right";
+    
+    partyListHTML += "<tr style='border-bottom: 1px solid #ccc;'>";
+    partyListHTML += "<td style='padding:8px;'>" + party.name + "</td>";
+    partyListHTML += "<td style='padding:8px; text-align:center;'>" + party.position + "</td>";
+    partyListHTML += "<td style='padding:8px;'>" + ideologyLabel + "</td>";
+    partyListHTML += "<td style='padding:8px;'><div style='display:inline-block; background-color:rgb(" + party.color.r + "," + party.color.g + "," + party.color.b + "); width:30px; height:30px; border:1px solid #333;'></div> #" + party.color_hex + "</td>";
+    partyListHTML += "<td style='padding:8px;'>" + (party.leader || "-") + "</td>";
+    partyListHTML += "</tr>";
+});
+
+partyListHTML += "</table>";
+Q.party_list_html = partyListHTML;
+!}
+
+{![+ Q.party_list_html +]!}
+
+**Total Parties Created:** [+ Q.custom_parties.length +]
+
+?]
+
+- @create_basic: Create New Party
+- @menu: Back
